@@ -1,12 +1,7 @@
-function App() {
+import AppRoutes from "./routes/AppRoutes";
 
-  return (
-    <>
-      <h1>
-        Connectia
-      </h1>
-    </>
-  )
+function App() {
+  return <AppRoutes />;
 }
 
-export default App
+export default App;

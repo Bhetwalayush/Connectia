@@ -42,23 +42,25 @@ class CommentRepository:
     
     def get_comments_by_post(
         self,
-        post_id: int
+        post_id: int,
+        limit: int = 20,
+        offset: int = 0
     ):
 
         return (
-
             self.db.query(Comment)
-            .options(joinedload(Comment.author))
+            .options(
+                joinedload(Comment.author)
+            )
             .filter(
                 Comment.post_id == post_id
             )
-
             .order_by(
                 Comment.created_at.asc()
             )
-
+            .offset(offset)
+            .limit(limit)
             .all()
-
         )
 
     def update_comment(

@@ -67,23 +67,34 @@ class CommentService:
         offset: int = 0
     ):
 
+        if limit < 1:
+            raise ValueError(
+                "Limit must be greater than 0."
+            )
+
+        if limit > 100:
+            raise ValueError(
+                "Limit cannot exceed 100."
+            )
+
+        if offset < 0:
+            raise ValueError(
+                "Offset cannot be negative."
+            )
+
         post = self.post_repository.get_post_by_id(
             post_id
         )
 
         if not post:
-
             raise ValueError(
                 "Post not found."
             )
 
-        return (
-            self.comment_repository
-            .get_comments_by_post(
-                post_id=post_id,
-                limit=limit,
-                offset=offset
-            )
+        return self.comment_repository.get_comments_by_post(
+            post_id=post_id,
+            limit=limit,
+            offset=offset
         )
 
     def get_comment(

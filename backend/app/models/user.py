@@ -38,4 +38,11 @@ class User(Base):
         back_populates="author",
         cascade="all, delete-orphan"
     )
+
+    likes = relationship(
+    "Like",
+    back_populates="user",
+    cascade="all, delete-orphan"
+    )
+    
     

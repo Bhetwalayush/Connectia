@@ -24,6 +24,7 @@ def to_post_type(post):
 
             email=post.author.email
 
-        )
+        ),
+        comment_count=len(post.comments)
 
     )

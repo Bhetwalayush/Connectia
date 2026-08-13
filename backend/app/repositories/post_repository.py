@@ -24,9 +24,16 @@ class PostRepository:
         self,
         post_id: int
     ):
+
         return (
             self.db.query(Post)
-            .filter(Post.id == post_id)
+            .options(
+                joinedload(Post.author),
+                joinedload(Post.comments)
+            )
+            .filter(
+                Post.id == post_id
+            )
             .first()
         )
 
@@ -37,7 +44,8 @@ class PostRepository:
     ):
         return (
             self.db.query(Post)
-            .options(joinedload(Post.author))
+            .options(joinedload(Post.author),
+                     joinedload(Post.comments))
             .order_by(Post.created_at.desc())
             .offset(offset)
             .limit(limit)

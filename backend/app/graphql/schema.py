@@ -1,6 +1,8 @@
 import strawberry
 
+from app.graphql.mutations.like_mutation import LikeMutation
 from app.graphql.queries.hello_query import HelloQuery
+from app.graphql.queries.like_query import LikeQuery
 from app.graphql.queries.user_query import UserQuery
 from app.graphql.mutations import Mutation
 from app.graphql.mutations.auth_mutation import AuthMutation
@@ -15,12 +17,13 @@ class Query(
 
     HelloQuery,
     
-
     UserQuery,
 
     PostQuery,
 
     CommentQuery,
+
+    LikeQuery,
 
 ):
     pass
@@ -29,7 +32,8 @@ class Query(
 class Mutation(
     AuthMutation,
     PostMutation,
-    CommentMutation
+    CommentMutation,
+    LikeMutation
 ):
     pass
 

@@ -1,0 +1,56 @@
+import asyncio
+
+
+class LikeEventManager:
+
+    def __init__(self):
+
+        self.subscribers: dict[
+            int,
+            set[asyncio.Queue]
+        ] = {}
+
+    def subscribe(
+        self,
+        post_id: int
+    ) -> asyncio.Queue:
+
+        queue = asyncio.Queue()
+
+        if post_id not in self.subscribers:
+
+            self.subscribers[post_id] = set()
+
+        self.subscribers[post_id].add(queue)
+
+        return queue
+
+    def unsubscribe(
+        self,
+        post_id: int,
+        queue: asyncio.Queue
+    ):
+
+        if post_id not in self.subscribers:
+            return
+
+        self.subscribers[post_id].discard(queue)
+
+        if not self.subscribers[post_id]:
+
+            del self.subscribers[post_id]
+
+    async def publish(
+        self,
+        post_id: int,
+        event: dict
+    ):
+
+        queues = self.subscribers.get(
+            post_id,
+            set()
+        )
+
+        for queue in queues:
+
+            await queue.put(event)

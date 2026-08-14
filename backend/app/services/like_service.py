@@ -51,9 +51,11 @@ class LikeService:
             post_id=post_id
         )
 
-        return self.like_repository.create_like(
-            like
+        created_like = self.like_repository.create_like(
+        like
         )
+
+        return created_like
 
     def unlike_post(
         self,

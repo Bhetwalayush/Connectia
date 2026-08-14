@@ -10,12 +10,19 @@ from app.graphql.mappers.like_mapper import to_like_type
 
 from app.services.like_service import LikeService
 
+from app.graphql.subscriptions.like_events import (
+    like_event_manager
+)
+
+from app.graphql.types.like_event_type import (
+    LikeAction
+)
 
 @strawberry.type
 class LikeMutation:
 
     @strawberry.mutation
-    def like_post(
+    async def like_post(
         self,
         info: Info,
         input: LikeInput
@@ -47,6 +54,18 @@ class LikeMutation:
             like_count = service.get_like_count(
                 input.post_id
             )
+            await like_event_manager.publish(
+
+                post_id=input.post_id,
+
+                event={
+                    "post_id": input.post_id,
+                    "user_id": current_user.id,
+                    "like_count": like_count,
+                    "action": LikeAction.LIKED
+                }
+
+            )
 
             return LikeResponse(
 
@@ -75,7 +94,7 @@ class LikeMutation:
             )
 
     @strawberry.mutation
-    def unlike_post(
+    async def unlike_post(
         self,
         info: Info,
         input: LikeInput
@@ -106,6 +125,23 @@ class LikeMutation:
 
             like_count = service.get_like_count(
                 input.post_id
+            )
+            await like_event_manager.publish(
+
+                post_id=input.post_id,
+
+                event={
+
+                    "post_id": input.post_id,
+
+                    "user_id": current_user.id,
+
+                    "like_count": like_count,
+
+                    "action": LikeAction.UNLIKED
+
+                }
+
             )
 
             return LikeResponse(

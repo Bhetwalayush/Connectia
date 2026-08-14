@@ -12,4 +12,4 @@ class LikeResponse:
 
     like: LikeType | None = None
 
-    like_count: int = 0
+    like_count: int 

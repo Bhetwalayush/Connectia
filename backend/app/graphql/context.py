@@ -15,19 +15,20 @@ async def get_context(request: Request):
         authorization = request.headers.get("Authorization")
 
         if authorization:
+            parts = authorization.split(" ")
 
-            token = authorization.split(" ")[1]
+            if len(parts) == 2 and parts[0] == "Bearer":
+                token = parts[1]
 
-            payload = decode_access_token(token)
+                payload = decode_access_token(token)
 
-            user_id = payload.get("sub")
+                user_id = payload.get("sub")
 
-            if user_id:
-
-                user = (
-                    UserRepository(db)
-                    .get_user_by_id(int(user_id))
-                )
+                if user_id:
+                    user = (
+                        UserRepository(db)
+                        .get_user_by_id(int(user_id))
+                    )
 
         return {
             "db": db,
@@ -35,8 +36,12 @@ async def get_context(request: Request):
         }
 
     except Exception:
-
         return {
             "db": db,
             "user": None
         }
+
+    finally:
+        # Don't close the DB here yet if your GraphQL
+        # resolvers still need to use it.
+        pass

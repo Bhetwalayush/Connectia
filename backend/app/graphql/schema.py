@@ -11,6 +11,9 @@ from app.graphql.queries.post_query import PostQuery
 from app.graphql.mutations.comment_mutation import (
     CommentMutation
 )
+from app.graphql.subscriptions.like_subscription import (
+    LikeSubscription
+)
 from app.graphql.queries.comment_query import CommentQuery
 @strawberry.type
 class Query(
@@ -37,8 +40,16 @@ class Mutation(
 ):
     pass
 
+@strawberry.type
+class Subscription(
+    LikeSubscription
+):
+    pass
+
+
 schema = strawberry.Schema(
     query=Query,
     mutation=Mutation,
+    subscription=Subscription
 )
 

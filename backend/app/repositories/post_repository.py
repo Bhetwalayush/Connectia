@@ -13,7 +13,6 @@ class PostRepository:
         post: Post
     ):
         self.db.add(post)
-
         self.db.commit()
 
         self.db.refresh(post)

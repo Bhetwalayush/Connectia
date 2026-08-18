@@ -1,42 +1,54 @@
-import { useApolloClient, useSubscription } from "@apollo/client/react";
+import { useEffect } from "react";
 
-import { LIKE_UPDATED_SUBSCRIPTION } from "../graphql/subscriptions/likeSubscription";
+import { useApolloClient, useSubscription } from "@apollo/client";
 
-function useLikeSubscription(postId) {
+import { LIKE_SUBSCRIPTION } from "../graphql/subscriptions/likeSubscription";
+
+function useLikeSubscription() {
   const client = useApolloClient();
 
-  return useSubscription(LIKE_UPDATED_SUBSCRIPTION, {
-    variables: {
+  const { data, loading, error } = useSubscription(LIKE_SUBSCRIPTION);
+
+  useEffect(() => {
+    if (!data?.likeSubscription) {
+      return;
+    }
+
+    const { postId, userId, likeCount, action } = data.likeSubscription;
+
+    console.log("Like event:", {
       postId,
-    },
+      userId,
+      likeCount,
+      action,
+    });
 
-    onData: ({ data: subscriptionResult }) => {
-      const event = subscriptionResult?.data?.likeUpdated;
+    const cacheId = client.cache.identify({
+      __typename: "Post",
+      id: postId,
+    });
 
-      if (!event) {
-        return;
-      }
+    if (!cacheId) {
+      console.warn("Post not found in Apollo cache:", postId);
 
-      const cacheId = client.cache.identify({
-        __typename: "Post",
-        id: event.postId,
-      });
+      return;
+    }
 
-      if (!cacheId) {
-        return;
-      }
+    client.cache.modify({
+      id: cacheId,
 
-      client.cache.modify({
-        id: cacheId,
-
-        fields: {
-          likeCount() {
-            return event.likeCount;
-          },
+      fields: {
+        likeCount() {
+          return likeCount;
         },
-      });
-    },
-  });
+      },
+    });
+  }, [data, client]);
+
+  return {
+    loading,
+    error,
+  };
 }
 
 export default useLikeSubscription;

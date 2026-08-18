@@ -3,9 +3,12 @@
 import { GET_POSTS } from "../../graphql/queries/postQueries";
 
 import PostCard from "../../components/post/PostCard";
+import useLikeSubscription from "../../hooks/useLikeSubscription";
 
 function Home() {
   const { data, loading, error } = useQuery(GET_POSTS);
+
+  useLikeSubscription();
 
   if (loading) {
     return <div>Loading posts...</div>;

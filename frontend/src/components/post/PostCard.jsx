@@ -1,8 +1,6 @@
-import useLikeSubscription from "../../hooks/useLikeSubscription";
+import LikeButton from "./LikeButton";
 
 function PostCard({ post }) {
-  useLikeSubscription(post.id);
-
   return (
     <article className="rounded-xl border bg-white p-4">
       <div>
@@ -11,10 +9,24 @@ function PostCard({ post }) {
 
       <p className="mt-3">{post.content}</p>
 
-      <div className="mt-4 flex gap-4">
-        <span>❤️ {post.likeCount}</span>
+      {post.imageUrl && (
+        <img
+          src={post.imageUrl}
+          alt="Post"
+          className="mt-4 w-full rounded-lg"
+        />
+      )}
 
-        <span>💬 {post.commentCount}</span>
+      <div className="mt-4 flex items-center gap-6">
+        <LikeButton
+          postId={post.id}
+          likedByMe={post.likedByMe}
+          likeCount={post.likeCount}
+        />
+
+        <button type="button" className="flex items-center gap-2">
+          💬 {post.commentCount}
+        </button>
       </div>
     </article>
   );

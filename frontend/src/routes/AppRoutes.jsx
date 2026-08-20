@@ -5,19 +5,22 @@ import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import NotFound from "../pages/NotFound/NotFound";
+import ProtectedRoutes from "./ProtectedRoutes";
+import PublicRoutes from "./PubliRoutes";
 
 function AppRoutes() {
   return (
     <Routes>
-      <Route element={<MainLayout />}>
+      <Route element={<ProtectedRoutes />}>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+      </Route>
 
-    <Route path="/" element={<Home />} />
-
-    </Route>
-
-      <Route path="/login" element={<Login />} />
-
-      <Route path="/register" element={<Register />} />
+      <Route element={<PublicRoutes />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Route>
 
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -1,20 +1,23 @@
 import { useEffect } from "react";
 
-import { useApolloClient, useSubscription } from "@apollo/client";
+import { useApolloClient, useSubscription } from "@apollo/client/react";
 
-import { LIKE_SUBSCRIPTION } from "../graphql/subscriptions/likeSubscription";
+import { LIKE_UPDATED_SUBSCRIPTION } from "../graphql/subscriptions/likeSubscription";
 
-function useLikeSubscription() {
+function useLikeSubscription(postId) {
   const client = useApolloClient();
 
-  const { data, loading, error } = useSubscription(LIKE_SUBSCRIPTION);
+  const { data, loading, error } = useSubscription(LIKE_UPDATED_SUBSCRIPTION, {
+    variables: { postId: Number(postId) },
+    skip: !postId,
+  });
 
   useEffect(() => {
-    if (!data?.likeSubscription) {
+    if (!data?.likeUpdated) {
       return;
     }
 
-    const { postId, userId, likeCount, action } = data.likeSubscription;
+    const { postId, userId, likeCount, action } = data.likeUpdated;
 
     console.log("Like event:", {
       postId,

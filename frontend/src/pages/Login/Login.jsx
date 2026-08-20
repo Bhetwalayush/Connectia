@@ -1,45 +1,58 @@
 ﻿import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client/react";
 import InputField from "../../components/auth/InputField";
 import PasswordInput from "../../components/auth/PasswordInput";
 import AuthButton from "../../components/auth/AuthButton";
+import { LOGIN } from "../../graphql/mutations/authMutations";
+import { useAuth } from "../../context/useAuth";
 
+function Login() {
+  const [email, setEmail] = useState("");
 
-function Login(){
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [login, { loading }] = useMutation(LOGIN);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { setToken, refetch } = useAuth();
 
-const [email,setEmail] = useState("");
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
 
-const [password,setPassword] = useState("");
+    try {
+      const { data } = await login({
+        variables: { input: { email, password } },
+      });
+      const response = data?.login;
 
+      if (!response?.success || !response.accessToken) {
+        setError(response?.message || "Unable to log in.");
+        return;
+      }
 
+      localStorage.setItem("token", response.accessToken);
+      setToken(response.accessToken);
+      await refetch();
+      navigate(location.state?.from?.pathname || "/", { replace: true });
+    } catch {
+      setError("Unable to connect to Connectia. Please try again.");
+    }
+  }
 
-function handleSubmit(e){
-
-e.preventDefault();
-
-console.log({
-email,
-password
-});
-
-}
-
-
-
-return (
-
-<div className="
+  return (
+    <div
+      className="
 min-h-screen
 flex
 items-center
 justify-center
-">
-
-<form
-
-onSubmit={handleSubmit}
-
-className="
+"
+    >
+      <form
+        onSubmit={handleSubmit}
+        className="
 bg-white
 p-8
 rounded-xl
@@ -47,66 +60,47 @@ shadow
 w-96
 space-y-4
 "
-
->
-
-<h1 className="
+      >
+        <h1
+          className="
 text-3xl
 font-bold
 text-center
-">
+"
+        >
+          Login
+        </h1>
 
-Login
+        {error && (
+          <p
+            className="rounded-lg bg-red-50 p-3 text-sm text-red-700"
+            role="alert"
+          >
+            {error}
+          </p>
+        )}
 
-</h1>
+        <InputField
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
+        <PasswordInput
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-
-<InputField
-
-type="email"
-
-placeholder="Email"
-
-value={email}
-
-onChange={(e)=>setEmail(e.target.value)}
-
-/>
-
-
-
-<PasswordInput
-
-value={password}
-
-onChange={(e)=>setPassword(e.target.value)}
-
-/>
-
-
-
-<AuthButton>
-
-Login
-
-</AuthButton>
-<Link
-to="/register"
-className="text-blue-600"
->
-Create account
-</Link>
-
-
-</form>
-
-
-</div>
-
-)
-
+        <AuthButton disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </AuthButton>
+        <Link to="/register" className="text-blue-600">
+          Create account
+        </Link>
+      </form>
+    </div>
+  );
 }
-
 
 export default Login;

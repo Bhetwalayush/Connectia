@@ -45,14 +45,7 @@ class PostMutation:
             return PostResponse(
                 success=True,
                 message="Post created successfully.",
-                post=PostType(
-                    id=post.id,
-                    content=post.content,
-                    image_url=post.image_url,
-                    created_at=post.created_at,
-                    updated_at=post.updated_at,
-                    user_id=post.user_id
-                )
+                post=to_post_type(post)
             )
 
         except ValueError as e:

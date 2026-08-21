@@ -11,7 +11,7 @@ engine = create_engine(
     echo=True
 )
 
-# Session factory for creating database sessions
+# Session factory for creating database session
 SessionLocal = sessionmaker(
     autoflush=False,
     autocommit=False,

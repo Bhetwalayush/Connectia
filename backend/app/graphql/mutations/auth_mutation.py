@@ -1,3 +1,4 @@
+# GraphQL mutations for authentication (login, register)
 import strawberry
 
 from app.graphql.inputs.auth_input import LoginInput
@@ -10,9 +11,12 @@ from app.graphql.types.auth_type import AuthResponse
 from app.graphql.types.user_type import UserType
 from strawberry.types import Info
 
+ACCESS_TOKEN_COOKIE = "access_token"
+
 @strawberry.type
 class AuthMutation:
 
+    # Register new user account
     @strawberry.mutation
     def register(
         self,
@@ -48,6 +52,7 @@ class AuthMutation:
                 message=str(e),
                 user=None
             )
+    # Authenticate user and return JWT token
     @strawberry.mutation
     def login(
         self,
@@ -67,10 +72,19 @@ class AuthMutation:
 
             user = result["user"]
 
+            info.context["response"].set_cookie(
+                key=ACCESS_TOKEN_COOKIE,
+                value=result["token"],
+                httponly=True,
+                secure=False,
+                samesite="lax",
+                max_age=60 * 60,
+            )
+
             return AuthResponse(
                 success=True,
                 message="Login successful.",
-                access_token=result["token"],
+                access_token=None,
                 user=UserType(
                     id=user.id,
                     username=user.username,
@@ -85,3 +99,18 @@ class AuthMutation:
                 access_token=None,
                 user=None
             )
+
+    @strawberry.mutation
+    def logout(self, info: Info) -> AuthResponse:
+        info.context["response"].delete_cookie(
+            key=ACCESS_TOKEN_COOKIE,
+            httponly=True,
+            samesite="lax",
+        )
+
+        return AuthResponse(
+            success=True,
+            message="Logout successful.",
+            access_token=None,
+            user=None,
+        )

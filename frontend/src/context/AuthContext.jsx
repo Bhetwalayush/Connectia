@@ -1,23 +1,26 @@
-import { useState } from "react";
-
-import { useQuery } from "@apollo/client/react";
+// Authentication context provider - Manages the cookie-backed user session
+import { useMutation, useQuery } from "@apollo/client/react";
 
 import { GET_CURRENT_USER } from "../graphql/queries/userQueries";
+import { LOGOUT } from "../graphql/mutations/authMutations";
 import { AuthContext } from "./AuthContextValue";
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  // Fetch current user data from GraphQL server
   const { data, loading, error, refetch } = useQuery(GET_CURRENT_USER, {
     fetchPolicy: "network-only",
-    skip: !token,
   });
+  const [logoutRequest] = useMutation(LOGOUT);
 
   const user = data?.me ?? null;
 
-  function logout() {
-    localStorage.removeItem("token");
-    setToken(null);
-    window.location.assign("/login");
+  // Clear the HttpOnly cookie through the backend and redirect to login.
+  async function logout() {
+    try {
+      await logoutRequest();
+    } finally {
+      window.location.assign("/login");
+    }
   }
 
   return (
@@ -27,7 +30,6 @@ export function AuthProvider({ children }) {
         loading,
         error,
         refetch,
-        setToken,
         logout,
       }}
     >

@@ -1,3 +1,4 @@
+# Like repository - Database access layer for like operations
 from sqlalchemy.orm import Session
 
 from app.models.like import Like
@@ -9,6 +10,7 @@ class LikeRepository:
 
         self.db = db
 
+    # Persist new like to database
     def create_like(
         self,
         like: Like
@@ -22,6 +24,7 @@ class LikeRepository:
 
         return like
 
+    # Check if user has already liked this post
     def get_like(
         self,
         user_id: int,

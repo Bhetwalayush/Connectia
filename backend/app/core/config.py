@@ -1,9 +1,11 @@
+# Load environment variables from .env file
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
 
+# Global application settings (database, security, JWT configuration)
 class Settings:
 
     DATABASE_URL = os.getenv("DATABASE_URL")

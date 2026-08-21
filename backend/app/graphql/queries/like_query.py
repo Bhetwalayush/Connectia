@@ -1,3 +1,4 @@
+# GraphQL queries for likes (likes list, like count)
 import strawberry
 
 from strawberry.types import Info
@@ -10,6 +11,7 @@ from app.graphql.mappers.like_mapper import to_like_type
 @strawberry.type
 class LikeQuery:
 
+    # Fetch paginated list of users who liked a post
     @strawberry.field
     def likes(
         self,
@@ -40,6 +42,7 @@ class LikeQuery:
 
             raise ValueError(str(e))
 
+    # Get total like count for a post
     @strawberry.field
     def like_count(
         self,

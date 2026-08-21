@@ -1,10 +1,13 @@
+// Real-time like count listener via WebSocket subscription
 import { useSubscription, useApolloClient } from "@apollo/client/react";
 
 import { LIKE_UPDATED_SUBSCRIPTION } from "../../graphql/subscriptions/likeSubscription";
 
+// Listen for like updates and sync Apollo cache
 function LiveLikeCount({ postId }) {
   const client = useApolloClient();
 
+  // Subscribe to like events and update cache in real-time
   const { error } = useSubscription(LIKE_UPDATED_SUBSCRIPTION, {
     variables: {
       postId,

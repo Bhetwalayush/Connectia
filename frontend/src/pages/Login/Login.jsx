@@ -1,4 +1,5 @@
-﻿import { useState } from "react";
+﻿// Login page - User authentication with email/password
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client/react";
 import InputField from "../../components/auth/InputField";
@@ -12,11 +13,13 @@ function Login() {
 
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  // Execute login mutation and handle response
   const [login, { loading }] = useMutation(LOGIN);
   const navigate = useNavigate();
   const location = useLocation();
-  const { setToken, refetch } = useAuth();
+  const { refetch } = useAuth();
 
+  // Handle login form submission
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
@@ -27,13 +30,11 @@ function Login() {
       });
       const response = data?.login;
 
-      if (!response?.success || !response.accessToken) {
+      if (!response?.success) {
         setError(response?.message || "Unable to log in.");
         return;
       }
 
-      localStorage.setItem("token", response.accessToken);
-      setToken(response.accessToken);
       await refetch();
       navigate(location.state?.from?.pathname || "/", { replace: true });
     } catch {

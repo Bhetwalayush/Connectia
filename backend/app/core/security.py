@@ -1,3 +1,4 @@
+# Password hashing and JWT token management
 from datetime import datetime, timedelta, timezone
 
 from jose import JWTError, jwt
@@ -7,12 +8,14 @@ from passlib.context import CryptContext
 from app.core.config import settings
 
 
+# Configure bcrypt for secure password hashing
 pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto"
 )
 
 
+# Hash plaintext password using bcrypt
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 

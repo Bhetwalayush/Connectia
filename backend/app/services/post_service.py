@@ -1,3 +1,4 @@
+# Post service - Handles post creation, retrieval, and modification
 from sqlalchemy.orm import Session
 
 from app.models.post import Post
@@ -10,6 +11,7 @@ class PostService:
 
         self.post_repository = PostRepository(db)
 
+    # Create new post with validation (empty check, character limit)
     def create_post(
     self,
     content: str,
@@ -62,6 +64,7 @@ class PostService:
 
         return post
 
+    # Fetch paginated feed of all posts
     def get_feed(
         self,
         limit: int = 10,
@@ -72,6 +75,7 @@ class PostService:
             offset=offset
         )
 
+    # Update post only if user is the author
     def update_post(
         self,
         post_id: int,

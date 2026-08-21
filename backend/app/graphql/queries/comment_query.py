@@ -1,3 +1,4 @@
+# GraphQL queries for retrieving comments
 import strawberry
 
 from strawberry.types import Info
@@ -10,6 +11,7 @@ from app.graphql.mappers.comment_mapper import to_comment_type
 @strawberry.type
 class CommentQuery:
 
+    # Fetch paginated comments for a specific post
     @strawberry.field
     def comments(
         self,

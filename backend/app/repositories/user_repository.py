@@ -1,3 +1,4 @@
+# User repository - Database access layer for user operations
 from sqlalchemy.orm import Session
 
 from app.models.user import User

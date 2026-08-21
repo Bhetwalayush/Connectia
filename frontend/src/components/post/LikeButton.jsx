@@ -1,3 +1,4 @@
+// Like/Unlike button with optimistic cache updates
 import { useApolloClient, useMutation } from "@apollo/client/react";
 
 import { LIKE_POST, UNLIKE_POST } from "../../graphql/mutations/likeMutations";
@@ -11,6 +12,7 @@ function LikeButton({ postId, likedByMe, likeCount }) {
 
   const loading = liking || unliking;
 
+  // Update Apollo cache with new like count and toggle state
   function updatePostLikeCount(newLikeCount) {
     const cacheId = client.cache.identify({
       __typename: "Post",

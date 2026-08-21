@@ -1,3 +1,4 @@
+# Comment service - Handles comment creation and validation logic
 from sqlalchemy.orm import Session
 
 from app.models.comment import Comment
@@ -13,6 +14,7 @@ class CommentService:
 
         self.post_repository = PostRepository(db)
 
+    # Create comment with validation (empty check, character limit, post exists)
     def create_comment(
         self,
         post_id: int,

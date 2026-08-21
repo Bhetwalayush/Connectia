@@ -1,3 +1,4 @@
+# Post repository - Database access layer for post operations
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from app.models.post import Post
@@ -19,6 +20,7 @@ class PostRepository:
 
         return post
 
+    # Retrieve post with eager loading of author and comments
     def get_post_by_id(
         self,
         post_id: int
@@ -36,6 +38,7 @@ class PostRepository:
             .first()
         )
 
+    # Fetch all posts ordered by creation date (newest first) with pagination
     def get_all_posts(
         self,
         limit: int = 10,

@@ -1,15 +1,18 @@
+// Real-time like updates via WebSocket subscriptions
 import { useEffect } from "react";
 
 import { useApolloClient, useSubscription } from "@apollo/client/react";
 
 import { LIKE_UPDATED_SUBSCRIPTION } from "../graphql/subscriptions/likeSubscription";
 
+// Subscribe to like updates and sync Apollo cache with real-time data
 function useLikeSubscription(postId) {
   const client = useApolloClient();
 
+  // Listen for like/unlike events on specific post
   const { data, loading, error } = useSubscription(LIKE_UPDATED_SUBSCRIPTION, {
     variables: { postId: Number(postId) },
-    skip: !postId,
+    skip: !postId, // Don't subscribe if no postId
   });
 
   useEffect(() => {

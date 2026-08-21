@@ -1,3 +1,4 @@
+# GraphQL mutations for likes (like_post, unlike_post)
 import strawberry
 
 from strawberry.types import Info
@@ -21,6 +22,7 @@ from app.graphql.types.like_event_type import (
 @strawberry.type
 class LikeMutation:
 
+    # Like a post with broadcast to subscribed clients
     @strawberry.mutation
     async def like_post(
         self,

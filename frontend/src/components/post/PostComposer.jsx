@@ -1,3 +1,4 @@
+// Post creation form component
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
 import { CREATE_POST } from "../../graphql/mutations/postMutations";
@@ -7,10 +8,12 @@ function PostComposer() {
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [message, setMessage] = useState("");
+  // Create post mutation with automatic cache update
   const [createPost, { loading }] = useMutation(CREATE_POST, {
     refetchQueries: [GET_POSTS],
   });
 
+  // Handle form submission and post creation
   async function handleSubmit(event) {
     event.preventDefault();
     setMessage("");

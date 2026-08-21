@@ -1,3 +1,4 @@
+# GraphQL query to fetch current authenticated user
 import strawberry
 
 from strawberry.types import Info
@@ -8,6 +9,7 @@ from app.graphql.types.user_type import UserType
 @strawberry.type
 class UserQuery:
 
+    # Get current authenticated user from JWT token
     @strawberry.field
 
     def me(
@@ -16,15 +18,12 @@ class UserQuery:
 
         info: Info
 
-    ) -> UserType:
+    ) -> UserType | None:
 
         user = info.context["user"]
 
         if user is None:
-
-            raise Exception(
-                "Unauthorized"
-            )
+            return None
 
         return UserType(
 

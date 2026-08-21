@@ -1,3 +1,4 @@
+# Like model - Represents a user liking a post (many-to-many relationship)
 from sqlalchemy import (
     Column,
     Integer,
@@ -40,6 +41,7 @@ class Like(Base):
         nullable=False
     )
 
+    # Prevent duplicate likes: each user can like a post only once
     __table_args__ = (
         UniqueConstraint(
             "user_id",

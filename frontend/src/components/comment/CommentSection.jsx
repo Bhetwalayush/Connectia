@@ -1,3 +1,4 @@
+// Comment display and creation component for posts
 import { useState } from "react";
 import { useApolloClient, useMutation, useQuery } from "@apollo/client/react";
 import { GET_COMMENTS } from "../../graphql/queries/commentQueries";
@@ -15,6 +16,7 @@ function CommentSection({ postId }) {
   const [editingContent, setEditingContent] = useState("");
   const client = useApolloClient();
   const { user } = useAuth();
+  // Fetch all comments for this post
   const { data, loading, error } = useQuery(GET_COMMENTS, {
     variables: { postId: Number(postId) },
   });

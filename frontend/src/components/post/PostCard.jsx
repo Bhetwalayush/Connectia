@@ -1,3 +1,4 @@
+// Post card component - Display post with edit/delete/like/comment options
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
 import LikeButton from "./LikeButton";
@@ -15,6 +16,7 @@ function PostCard({ post }) {
   const [editing, setEditing] = useState(false);
   const [content, setContent] = useState(post.content);
   const [message, setMessage] = useState("");
+  // Refetch posts list after mutation
   const [updatePost, { loading: updating }] = useMutation(UPDATE_POST, {
     refetchQueries: [GET_POSTS],
     awaitRefetchQueries: true,
@@ -24,8 +26,10 @@ function PostCard({ post }) {
     awaitRefetchQueries: true,
   });
   useLikeSubscription(post.id);
+  // Only post author can edit/delete
   const isOwner = String(user?.id) === String(post.author.id);
 
+  // Update post content
   async function handleUpdate(event) {
     event.preventDefault();
     setMessage("");

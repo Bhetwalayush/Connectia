@@ -1,3 +1,4 @@
+# GraphQL mutations for comments (create, update, delete)
 import strawberry
 
 from strawberry.types import Info
@@ -27,6 +28,7 @@ from app.services.comment_service import (
 @strawberry.type
 class CommentMutation:
 
+    # Create new comment on a post
     @strawberry.mutation
     def create_comment(
         self,

@@ -1,3 +1,4 @@
+# Authentication service - Handles user registration and login logic
 from sqlalchemy.orm import Session
 
 from app.repositories.user_repository import UserRepository
@@ -13,6 +14,7 @@ class AuthService:
     def __init__(self, db: Session):
         self.user_repository = UserRepository(db)
 
+    # Register new user with username/email validation and password hashing
     def register_user(
         self,
         user_data: UserCreate
@@ -52,6 +54,7 @@ class AuthService:
     
         return user
     
+    # Authenticate user and return JWT token on success
     def login_user(
         self,
         email: str,

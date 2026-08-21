@@ -1,3 +1,4 @@
+# GraphQL queries for retrieving posts
 import strawberry
 
 from strawberry.types import Info
@@ -10,6 +11,7 @@ from app.graphql.types.post_type import PostType
 @strawberry.type
 class PostQuery:
 
+    # Fetch paginated feed of all posts
     @strawberry.field
     def posts(
         self,
@@ -31,6 +33,7 @@ class PostQuery:
             to_post_type(post)
             for post in posts
         ]
+    # Fetch single post by ID with full details
     @strawberry.field
     def post(
         self,

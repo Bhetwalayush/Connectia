@@ -1,3 +1,4 @@
+# Like service - Handles post liking/unliking with duplicate prevention
 from sqlalchemy.orm import Session
 
 from app.models.like import Like
@@ -13,6 +14,7 @@ class LikeService:
 
         self.post_repository = PostRepository(db)
 
+    # Like a post (prevent duplicate likes via unique constraint)
     def like_post(
         self,
         post_id: int,

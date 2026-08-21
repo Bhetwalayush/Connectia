@@ -1,4 +1,5 @@
-﻿import { useQuery } from "@apollo/client/react";
+﻿// Home page - Main feed displaying all posts from users
+import { useQuery } from "@apollo/client/react";
 
 import { GET_POSTS } from "../../graphql/queries/postQueries";
 
@@ -6,6 +7,7 @@ import PostCard from "../../components/post/PostCard";
 import PostComposer from "../../components/post/PostComposer";
 
 function Home() {
+  // Fetch all posts from GraphQL backend
   const { data, loading, error } = useQuery(GET_POSTS);
 
   if (loading) {
@@ -25,7 +27,7 @@ function Home() {
   }
   return (
     <main className="mx-auto max-w-2xl space-y-4">
-      <PostComposer />
+      <PostComposer /> {/* Post creation form */}
       {data?.posts?.length ? (
         data.posts.map((post) => <PostCard key={post.id} post={post} />)
       ) : (

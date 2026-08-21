@@ -1,3 +1,4 @@
+// Application route configuration with protected and public routes
 import { Routes, Route } from "react-router-dom";
 
 import MainLayout from "../layouts/MainLayout";
@@ -8,6 +9,7 @@ import NotFound from "../pages/NotFound/NotFound";
 import ProtectedRoutes from "./ProtectedRoutes";
 import PublicRoutes from "./PubliRoutes";
 
+// Define all application routes with access control
 function AppRoutes() {
   return (
     <Routes>

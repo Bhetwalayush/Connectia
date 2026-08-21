@@ -1,3 +1,4 @@
+# Post model - Represents a user's social media post
 from sqlalchemy import (
     Column,
     Integer,
@@ -31,7 +32,7 @@ class Post(Base):
 
     image_url = Column(
         String,
-        nullable=True
+        nullable=True  # Optional image attachment
     )
 
     user_id = Column(

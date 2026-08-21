@@ -1,4 +1,5 @@
-﻿import { useState } from "react";
+﻿// User registration form with validation
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client/react";
 import InputField from "../../components/auth/InputField";
@@ -18,6 +19,7 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [error, setError] = useState("");
+  // Execute registration mutation
   const [register, { loading }] = useMutation(REGISTER);
   const navigate = useNavigate();
 

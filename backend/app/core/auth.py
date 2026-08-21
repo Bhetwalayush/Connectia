@@ -1,9 +1,11 @@
+# Current user extraction and validation from JWT token
 from fastapi import HTTPException
 
 from app.core.security import decode_access_token
 from app.repositories.user_repository import UserRepository
 
 
+# Extract and validate current user from JWT token
 def get_current_user(
     token: str,
     db

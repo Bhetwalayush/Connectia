@@ -1,3 +1,4 @@
+# GraphQL schema definition - Combines all queries, mutations, and subscriptions
 import strawberry
 
 from app.graphql.mutations.like_mutation import LikeMutation
@@ -15,6 +16,8 @@ from app.graphql.subscriptions.like_subscription import (
     LikeSubscription
 )
 from app.graphql.queries.comment_query import CommentQuery
+
+# Combine all read operations (queries)
 @strawberry.type
 class Query(
 

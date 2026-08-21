@@ -1,3 +1,4 @@
+# Comment repository - Database access layer for comment operations
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from app.models.comment import Comment
@@ -10,6 +11,7 @@ class CommentRepository:
     ):
         self.db = db
 
+    # Persist new comment to database
     def create_comment(
         self,
         comment: Comment

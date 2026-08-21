@@ -1,3 +1,4 @@
+# GraphQL mutations for posts (create, update, delete)
 import strawberry
 
 from strawberry.types import Info
@@ -14,6 +15,7 @@ from app.services.post_service import PostService
 @strawberry.type
 class PostMutation:
 
+    # Create new post with authentication check
     @strawberry.mutation
     def create_post(
         self,

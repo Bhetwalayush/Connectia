@@ -19,12 +19,20 @@ export const LOGIN = gql`
     login(input: $input) {
       success
       message
-      accessToken
       user {
         id
         username
         email
       }
+    }
+  }
+`;
+
+export const LOGOUT = gql`
+  mutation Logout {
+    logout {
+      success
+      message
     }
   }
 `;

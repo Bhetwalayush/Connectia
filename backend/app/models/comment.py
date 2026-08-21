@@ -1,3 +1,4 @@
+# Comment model - Represents a user's comment on a post
 from sqlalchemy import (
     Column,
     Integer,
@@ -36,7 +37,7 @@ class Comment(Base):
     post_id = Column(
         Integer,
         ForeignKey("posts.id"),
-        nullable=False
+        nullable=False  # Comments are tied to a specific post
     )
 
     created_at = Column(

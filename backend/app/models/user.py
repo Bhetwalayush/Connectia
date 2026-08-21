@@ -1,3 +1,4 @@
+# User model - Represents a registered user account
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.sql import func
 
@@ -14,7 +15,7 @@ class User(Base):
 
     email = Column(String, unique=True, nullable=False)
 
-    password = Column(String, nullable=False)
+    password = Column(String, nullable=False)  # Stored as bcrypt hash
 
     created_at = Column(
         DateTime(timezone=True),
@@ -27,18 +28,21 @@ class User(Base):
         onupdate=func.now()
     )
 
+    # One-to-many relationship: User can have multiple posts
     posts = relationship(
     "Post",
     back_populates="author",
     cascade="all, delete-orphan"
     )
 
+    # One-to-many relationship: User can have multiple comments
     comments = relationship(
         "Comment",
         back_populates="author",
         cascade="all, delete-orphan"
     )
 
+    # One-to-many relationship: User can like multiple posts
     likes = relationship(
     "Like",
     back_populates="user",

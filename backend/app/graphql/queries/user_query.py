@@ -4,6 +4,15 @@ import strawberry
 from strawberry.types import Info
 
 from app.graphql.types.user_type import UserType
+from app.repositories.user_repository import UserRepository
+
+
+def to_user_type(user) -> UserType:
+    return UserType(
+        id=user.id,
+        username=user.username,
+        email=user.email,
+    )
 
 
 @strawberry.type
@@ -25,12 +34,10 @@ class UserQuery:
         if user is None:
             return None
 
-        return UserType(
+        return to_user_type(user)
 
-            id=user.id,
+    @strawberry.field
+    def user(self, info: Info, user_id: int) -> UserType | None:
+        user = UserRepository(info.context["db"]).get_user_by_id(user_id)
 
-            username=user.username,
-
-            email=user.email
-
-        )
+        return to_user_type(user) if user else None

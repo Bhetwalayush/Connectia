@@ -30,7 +30,7 @@ function useLikeSubscription(postId) {
     });
 
     const cacheId = client.cache.identify({
-      __typename: "Post",
+      __typename: "PostType",
       id: postId,
     });
 

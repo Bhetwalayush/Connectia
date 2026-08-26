@@ -48,3 +48,20 @@ class PostQuery:
         post = service.get_post(post_id)
 
         return to_post_type(post)
+
+    @strawberry.field
+    def posts_by_user(
+        self,
+        info: Info,
+        user_id: int,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> list[PostType]:
+        service = PostService(info.context["db"])
+        posts = service.get_posts_by_user(
+            user_id=user_id,
+            limit=limit,
+            offset=offset,
+        )
+
+        return [to_post_type(post) for post in posts]

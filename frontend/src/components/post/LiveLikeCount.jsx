@@ -22,7 +22,7 @@ function LiveLikeCount({ postId }) {
 
       client.cache.modify({
         id: client.cache.identify({
-          __typename: "Post",
+          __typename: "PostType",
           id: event.postId,
         }),
 

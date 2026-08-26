@@ -54,6 +54,22 @@ class PostRepository:
             .all()
         )
 
+    def get_posts_by_user(
+        self,
+        user_id: int,
+        limit: int = 20,
+        offset: int = 0,
+    ):
+        return (
+            self.db.query(Post)
+            .options(joinedload(Post.author), joinedload(Post.comments))
+            .filter(Post.user_id == user_id)
+            .order_by(Post.created_at.desc())
+            .offset(offset)
+            .limit(limit)
+            .all()
+        )
+
     def update_post(
         self,
         post: Post

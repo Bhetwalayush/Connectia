@@ -9,3 +9,16 @@ export const GET_CURRENT_USER = gql`
     }
   }
 `;
+
+export const GET_PROFILE = gql`
+  query GetProfile($userId: Int!) {
+    user(userId: $userId) {
+      id
+      username
+      email
+      followersCount
+      followingCount
+      isFollowing
+    }
+  }
+`;

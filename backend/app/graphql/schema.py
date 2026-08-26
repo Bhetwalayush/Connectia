@@ -5,6 +5,8 @@ from app.graphql.mutations.like_mutation import LikeMutation
 from app.graphql.queries.hello_query import HelloQuery
 from app.graphql.queries.like_query import LikeQuery
 from app.graphql.queries.user_query import UserQuery
+from app.graphql.queries.follow_query import FollowQuery
+from app.graphql.mutations.follow_mutation import FollowMutations
 from app.graphql.mutations import Mutation
 from app.graphql.mutations.auth_mutation import AuthMutation
 from app.graphql.mutations.post_mutation import PostMutation
@@ -31,6 +33,8 @@ class Query(
 
     LikeQuery,
 
+    FollowQuery,
+
 ):
     pass
 
@@ -39,7 +43,8 @@ class Mutation(
     AuthMutation,
     PostMutation,
     CommentMutation,
-    LikeMutation
+    LikeMutation,
+    FollowMutations
 ):
     pass
 

@@ -1,6 +1,7 @@
 // Post card component - Display post with edit/delete/like/comment options
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
+import { Link } from "react-router-dom";
 import LikeButton from "./LikeButton";
 import useLikeSubscription from "../../hooks/useLikeSubscription";
 import CommentSection from "../comment/CommentSection";
@@ -77,7 +78,12 @@ function PostCard({ post }) {
   return (
     <article className="rounded-xl border bg-white p-4">
       <div className="flex items-start justify-between gap-3">
-        <h2 className="font-semibold">{post.author.username}</h2>
+        <Link
+          to={`/profile/${post.author.id}`}
+          className="font-semibold hover:text-blue-600"
+        >
+          {post.author.username}
+        </Link>
         {isOwner && (
           <div className="flex shrink-0 gap-2 text-xs">
             <button

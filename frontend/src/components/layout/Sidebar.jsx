@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
 
 function Sidebar() {
@@ -18,6 +19,10 @@ function Sidebar() {
     }
   }
 
+  //user name in sidebar
+  const { user } = useAuth();
+  const userName = user?.username || user?.email;
+
   return (
     <aside
       className="
@@ -35,7 +40,11 @@ function Sidebar() {
     "
     >
       <ul className="space-y-4">
-        <li>Home</li>
+        <li>
+          <NavLink to="/" end className="hover:text-blue-600">
+            Home
+          </NavLink>
+        </li>
 
         <li>Explore</li>
 
@@ -43,7 +52,11 @@ function Sidebar() {
 
         <li>Notifications</li>
 
-        <li>Profile</li>
+        <li>
+          <NavLink to="/profile" className="hover:text-blue-600">
+            Profile
+          </NavLink>
+        </li>
       </ul>
 
       <div className="mt-auto pt-6">
@@ -60,6 +73,7 @@ function Sidebar() {
         >
           {loggingOut ? "Logging out..." : "Logout"}
         </button>
+        <li>{userName}</li>
       </div>
     </aside>
   );

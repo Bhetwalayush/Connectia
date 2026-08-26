@@ -75,6 +75,18 @@ class PostService:
             offset=offset
         )
 
+    def get_posts_by_user(
+        self,
+        user_id: int,
+        limit: int = 20,
+        offset: int = 0,
+    ):
+        return self.post_repository.get_posts_by_user(
+            user_id=user_id,
+            limit=limit,
+            offset=offset,
+        )
+
     # Update post only if user is the author
     def update_post(
         self,

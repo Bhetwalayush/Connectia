@@ -61,7 +61,7 @@ function CommentSection({ postId }) {
 
       setContent("");
       const cacheId = client.cache.identify({
-        __typename: "Post",
+        __typename: "PostType",
         id: String(postId),
       });
       if (cacheId) {
@@ -128,7 +128,7 @@ function CommentSection({ postId }) {
       }
 
       const cacheId = client.cache.identify({
-        __typename: "Post",
+        __typename: "PostType",
         id: String(postId),
       });
       if (cacheId) {

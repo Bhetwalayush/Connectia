@@ -92,6 +92,7 @@ class PostService:
         self,
         post_id: int,
         content: str,
+        image_url: str | None,
         current_user
     ):
 
@@ -112,6 +113,7 @@ class PostService:
             )
 
         post.content = content
+        post.image_url = image_url
 
         return self.post_repository.update_post(post)
 

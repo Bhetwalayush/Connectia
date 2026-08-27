@@ -64,15 +64,15 @@ class AuthService:
         user = self.user_repository.get_user_by_email(
             email
         )
-        #if the email field is empty
+        # if the email field is empty
         if not email:
-            raise ValueError(
-                "Email field cannot be empty."
-            )
+          raise ValueError(
+              "Email is required."
+          ) 
         #if the password field is empty
         if not password:
             raise ValueError(
-                "Password field cannot be empty."
+                "Password is required."
             )
 
         if not user:

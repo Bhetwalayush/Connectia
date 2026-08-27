@@ -5,6 +5,9 @@ import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home/Home";
 import Profile from "../pages/Profile/Profile";
 import EditProfile from "../pages/EditProfile/EditProfile";
+import Explore from "../pages/Explore/Explore";
+import Messages from "../pages/Messages/Messages";
+import Notifications from "../pages/Notifications/Notifications";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import NotFound from "../pages/NotFound/NotFound";
@@ -18,6 +21,9 @@ function AppRoutes() {
       <Route element={<ProtectedRoutes />}>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/:userId" element={<Profile />} />
           <Route path="/edit-profile" element={<EditProfile />} />

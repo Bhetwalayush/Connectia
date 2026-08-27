@@ -1,21 +1,29 @@
-// Main application layout - Contains navbar, sidebars, and main content area
+import { useCallback, useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import Navbar from "../components/layout/Navbar";
 import Sidebar from "../components/layout/Sidebar";
 import RightSidebar from "../components/layout/RightSidebar";
+import MobileNavDrawer from "../components/layout/MobileNavDrawer";
 
 function MainLayout() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-gray-100">
-      <Navbar /> {/* Top navigation bar */}
+      <Navbar
+        menuOpen={menuOpen}
+        onMenuToggle={() => setMenuOpen((open) => !open)}
+      />
       <div className="flex min-h-0 flex-1">
-        <Sidebar /> {/* Left navigation sidebar */}
+        <Sidebar />
         <main className="min-w-0 flex-1 overflow-y-auto p-5">
-          <Outlet /> {/* Page content from routes */}
+          <Outlet />
         </main>
-        <RightSidebar /> {/* Right sidebar with recommendations/info */}
+        <RightSidebar />
       </div>
+      <MobileNavDrawer open={menuOpen} onClose={closeMenu} />
     </div>
   );
 }

@@ -16,7 +16,7 @@ function PostCard({ post }) {
   const { user } = useAuth();
   const [editing, setEditing] = useState(false);
   const [content, setContent] = useState(post.content);
-  const [imageUrl, setImageUrl] = useState(post.imageUrl);
+  const [imageUrl, setImageUrl] = useState(post.imageUrl || "");
   const [message, setMessage] = useState("");
   // Refetch posts list after mutation
   const [updatePost, { loading: updating }] = useMutation(UPDATE_POST, {

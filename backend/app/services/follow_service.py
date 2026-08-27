@@ -20,3 +20,8 @@ def unfollow_user(db: Session, current_user_id: int, target_user_id: int):
 
 def is_following(db: Session, current_user_id: int, target_user_id: int) -> bool:
     return repo.get_follow(db, current_user_id, target_user_id) is not None
+
+
+def get_suggested_users(db: Session, current_user_id: int, limit: int = 5):
+    safe_limit = max(1, min(limit, 20))
+    return repo.get_suggested_users(db, current_user_id, safe_limit)

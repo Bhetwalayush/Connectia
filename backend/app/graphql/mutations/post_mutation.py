@@ -81,6 +81,7 @@ class PostMutation:
             post = service.update_post(
                 post_id=input.post_id,
                 content=input.content,
+                image_url=input.image_url,
                 current_user=current_user
             )
 

@@ -14,3 +14,5 @@ class UpdatePostInput:
     post_id: int
 
     content: str
+
+    image_url: str | None = None

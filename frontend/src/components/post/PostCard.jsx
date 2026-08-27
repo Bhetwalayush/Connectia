@@ -16,6 +16,7 @@ function PostCard({ post }) {
   const { user } = useAuth();
   const [editing, setEditing] = useState(false);
   const [content, setContent] = useState(post.content);
+  const [imageUrl, setImageUrl] = useState(post.imageUrl);
   const [message, setMessage] = useState("");
   // Refetch posts list after mutation
   const [updatePost, { loading: updating }] = useMutation(UPDATE_POST, {
@@ -31,6 +32,7 @@ function PostCard({ post }) {
   const isOwner = String(user?.id) === String(post.author.id);
 
   // Update post content
+  // Update Image url
   async function handleUpdate(event) {
     event.preventDefault();
     setMessage("");
@@ -43,7 +45,11 @@ function PostCard({ post }) {
     try {
       const { data } = await updatePost({
         variables: {
-          input: { postId: Number(post.id), content: content.trim() },
+          input: {
+            postId: Number(post.id),
+            content: content.trim(),
+            imageUrl: imageUrl.trim() || null,
+          },
         },
       });
 
@@ -113,6 +119,13 @@ function PostCard({ post }) {
             onChange={(event) => setContent(event.target.value)}
             rows={4}
             className="w-full resize-none rounded-lg border border-gray-200 p-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          />
+          <input
+            type="text"
+            value={imageUrl || ""}
+            onChange={(event) => setImageUrl(event.target.value)}
+            placeholder="Image url optional"
+            className="w-full rounded-lg border border-gray-200 p-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           />
           <button
             type="submit"

@@ -11,12 +11,11 @@ import { useAuth } from "../../context/useAuth";
 
 const PREVIEW_COUNT = 2;
 
-function CommentSection({ postId }) {
+function CommentSection({ postId, showAll, setShowAll }) {
   const [content, setContent] = useState("");
   const [message, setMessage] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editingContent, setEditingContent] = useState("");
-  const [showAll, setShowAll] = useState(false);
   const client = useApolloClient();
   const { user } = useAuth();
   // Fetch all comments for this post

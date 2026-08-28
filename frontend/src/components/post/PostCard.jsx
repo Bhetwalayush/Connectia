@@ -18,6 +18,7 @@ function PostCard({ post }) {
   const [content, setContent] = useState(post.content);
   const [imageUrl, setImageUrl] = useState(post.imageUrl || "");
   const [message, setMessage] = useState("");
+  const [showComments, setShowComments] = useState(false);
   // Refetch posts list after mutation
   const [updatePost, { loading: updating }] = useMutation(UPDATE_POST, {
     refetchQueries: [GET_POSTS],
@@ -154,12 +155,20 @@ function PostCard({ post }) {
           likeCount={post.likeCount}
         />
 
-        <button type="button" className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setShowComments(true)}
+          className="flex items-center gap-2"
+        >
           <span aria-hidden="true">💬</span> {post.commentCount}
         </button>
       </div>
 
-      <CommentSection postId={post.id} />
+      <CommentSection
+        postId={post.id}
+        showAll={showComments}
+        setShowAll={setShowComments}
+      />
       {message && (
         <p className="mt-2 text-xs text-red-600" role="status">
           {message}

@@ -10,11 +10,23 @@ export default function FollowButton({
   const { toggleFollow, loading } = useFollow(userId, isFollowing, onToggled);
 
   const followLabel = followsYou ? "Follow back" : "Follow";
+  // adding a conformation prompt for unfollowing to prevent accidental unfollows
+  const handleClick = () => {
+    if (isFollowing) {
+      const confirmUnfollow = window.confirm(
+        "Are you sure you want to unfollow this user?",
+      );
+      if (!confirmUnfollow) {
+        return;
+      }
+    }
+    toggleFollow();
+  };
 
   return (
     <button
       type="button"
-      onClick={toggleFollow}
+      onClick={handleClick}
       disabled={loading}
       className={`rounded-full font-medium transition ${
         compact ? "px-3 py-1 text-sm" : "px-4 py-2"

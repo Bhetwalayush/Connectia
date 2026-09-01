@@ -30,9 +30,9 @@ class User(Base):
 
     # One-to-many relationship: User can have multiple posts
     posts = relationship(
-    "Post",
-    back_populates="author",
-    cascade="all, delete-orphan"
+        "Post",
+        back_populates="author",
+        cascade="all, delete-orphan"
     )
 
     # One-to-many relationship: User can have multiple comments
@@ -44,9 +44,27 @@ class User(Base):
 
     # One-to-many relationship: User can like multiple posts
     likes = relationship(
-    "Like",
-    back_populates="user",
-    cascade="all, delete-orphan"
+        "Like",
+        back_populates="user",
+        cascade="all, delete-orphan"
     )
-    
-    
+
+    # 1-on-1 conversations where this user is stored as the lower-id side
+    conversations_as_user_one = relationship(
+        "Conversation",
+        foreign_keys="Conversation.user_one_id",
+        back_populates="user_one",
+    )
+
+    # 1-on-1 conversations where this user is stored as the higher-id side
+    conversations_as_user_two = relationship(
+        "Conversation",
+        foreign_keys="Conversation.user_two_id",
+        back_populates="user_two",
+    )
+
+    # All messages this user has sent, across any conversation
+    sent_messages = relationship(
+        "Message",
+        back_populates="sender",
+    )

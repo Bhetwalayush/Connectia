@@ -54,3 +54,58 @@ class LikeEventManager:
         for queue in queues:
 
             await queue.put(event)
+
+
+class MessageEventManager:
+
+    def __init__(self):
+
+        self.subscribers: dict[
+            int,
+            set[asyncio.Queue]
+        ] = {}
+
+    def subscribe(
+        self,
+        conversation_id: int
+    ) -> asyncio.Queue:
+
+        queue = asyncio.Queue()
+
+        if conversation_id not in self.subscribers:
+
+            self.subscribers[conversation_id] = set()
+
+        self.subscribers[conversation_id].add(queue)
+
+        return queue
+
+    def unsubscribe(
+        self,
+        conversation_id: int,
+        queue: asyncio.Queue
+    ):
+
+        if conversation_id not in self.subscribers:
+            return
+
+        self.subscribers[conversation_id].discard(queue)
+
+        if not self.subscribers[conversation_id]:
+
+            del self.subscribers[conversation_id]
+
+    async def publish(
+        self,
+        conversation_id: int,
+        event: dict
+    ):
+
+        queues = self.subscribers.get(
+            conversation_id,
+            set()
+        )
+
+        for queue in queues:
+
+            await queue.put(event)

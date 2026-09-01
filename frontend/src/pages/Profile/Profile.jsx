@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client/react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 import FollowButton from "../../components/profile/FollowButton";
 import ProfileSkeleton from "../../components/profile/ProfileSkeleton";
@@ -11,6 +11,7 @@ import { GET_PROFILE } from "../../graphql/queries/userQueries";
 function Profile() {
   const { user: currentUser } = useAuth();
   const { userId } = useParams();
+  const navigate = useNavigate();
   const profileId = Number(userId || currentUser?.id);
   const isValidProfileId = Number.isInteger(profileId) && profileId > 0;
 
@@ -62,7 +63,9 @@ function Profile() {
           </div>
           <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">{profile.username}</h1>
+              <h1 className="text-2xl font-bold text-slate-900">
+                {profile.username}
+              </h1>
               <p className="mt-1 text-sm text-slate-500">{profile.email}</p>
             </div>
             {isOwnProfile ? (
@@ -73,28 +76,44 @@ function Profile() {
                 Edit profile
               </Link>
             ) : (
-              <FollowButton
-                userId={profile.id}
-                isFollowing={profile.isFollowing}
-                onToggled={refreshProfile}
-              />
+              <div className="flex gap-2">
+                <FollowButton
+                  userId={profile.id}
+                  isFollowing={profile.isFollowing}
+                  onToggled={refreshProfile}
+                />
+                <button
+                  type="button"
+                  onClick={() => navigate(`/messages/new?userId=${profile.id}`)}
+                  className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                >
+                  Message
+                </button>
+              </div>
             )}
           </div>
           <dl className="mt-6 flex gap-8 text-sm">
             <div>
               <dt className="text-slate-500">Followers</dt>
-              <dd className="font-semibold text-slate-900">{profile.followersCount}</dd>
+              <dd className="font-semibold text-slate-900">
+                {profile.followersCount}
+              </dd>
             </div>
             <div>
               <dt className="text-slate-500">Following</dt>
-              <dd className="font-semibold text-slate-900">{profile.followingCount}</dd>
+              <dd className="font-semibold text-slate-900">
+                {profile.followingCount}
+              </dd>
             </div>
           </dl>
         </div>
       </section>
 
       <section aria-labelledby="profile-posts-heading" className="space-y-4">
-        <h2 id="profile-posts-heading" className="text-lg font-bold text-slate-900">
+        <h2
+          id="profile-posts-heading"
+          className="text-lg font-bold text-slate-900"
+        >
           Posts
         </h2>
         {postsLoading && (

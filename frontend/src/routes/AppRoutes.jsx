@@ -6,14 +6,15 @@ import Home from "../pages/Home/Home";
 import Profile from "../pages/Profile/Profile";
 import EditProfile from "../pages/EditProfile/EditProfile";
 import Explore from "../pages/Explore/Explore";
-import Messages from "../pages/Messages/Messages";
+// import Messages from "../pages/Messages/Messages";
 import Notifications from "../pages/Notifications/Notifications";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import NotFound from "../pages/NotFound/NotFound";
 import ProtectedRoutes from "./ProtectedRoutes";
 import PublicRoutes from "./PubliRoutes";
-
+import Chat from "../pages/Messages/Chat";
+import Inbox from "../pages/Messages/inbox";
 // Define all application routes with access control
 function AppRoutes() {
   return (
@@ -22,7 +23,9 @@ function AppRoutes() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
-          <Route path="/messages" element={<Messages />} />
+          <Route path="/messages" element={<Inbox />} />
+          <Route path="/messages/new" element={<Chat />} />
+          <Route path="/messages/:conversationId" element={<Chat />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/:userId" element={<Profile />} />

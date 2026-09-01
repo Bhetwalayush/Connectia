@@ -2,8 +2,10 @@
 import strawberry
 
 from app.graphql.mutations.like_mutation import LikeMutation
+from app.graphql.mutations.message_mutation import MessageMutation
 from app.graphql.queries.hello_query import HelloQuery
 from app.graphql.queries.like_query import LikeQuery
+from app.graphql.queries.message_query import MessageQuery
 from app.graphql.queries.user_query import UserQuery
 from app.graphql.queries.follow_query import FollowQuery
 from app.graphql.mutations.follow_mutation import FollowMutations
@@ -18,6 +20,7 @@ from app.graphql.subscriptions.like_subscription import (
     LikeSubscription
 )
 from app.graphql.queries.comment_query import CommentQuery
+from app.graphql.subscriptions.message_subscription import MessageSubscription
 
 # Combine all read operations (queries)
 @strawberry.type
@@ -35,6 +38,9 @@ class Query(
 
     FollowQuery,
 
+    MessageQuery,
+    
+
 ):
     pass
 
@@ -44,13 +50,15 @@ class Mutation(
     PostMutation,
     CommentMutation,
     LikeMutation,
-    FollowMutations
+    FollowMutations,
+    MessageMutation,
 ):
     pass
 
 @strawberry.type
 class Subscription(
-    LikeSubscription
+    LikeSubscription,
+    MessageSubscription,
 ):
     pass
 

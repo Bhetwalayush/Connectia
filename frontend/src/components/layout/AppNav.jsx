@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useQuery, useSubscription } from "@apollo/client/react";
 import { useAuth } from "../../context/useAuth";
+import { GET_CONVERSATIONS } from "../../graphql/queries/messageQueries";
+import { INBOX_UPDATED_SUBSCRIPTION } from "../../graphql/subscriptions/inboxSubscription";
 import ProfileSearch from "./ProfileSearch";
 
 const links = [
@@ -17,6 +20,26 @@ function AppNav({ onNavigate }) {
   const [error, setError] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const userName = user?.username || user?.email;
+
+  const { data: conversationsData, refetch: refetchConversations } = useQuery(
+    GET_CONVERSATIONS,
+    { skip: !user },
+  );
+
+  useSubscription(INBOX_UPDATED_SUBSCRIPTION, {
+    variables: { userId: user?.id },
+    skip: !user,
+    onData: () => {
+      refetchConversations();
+    },
+  });
+
+  const hasUnreadMessages = (conversationsData?.conversations ?? []).some(
+    (conversation) =>
+      conversation.lastMessage &&
+      !conversation.lastMessage.readAt &&
+      String(conversation.lastMessage.sender.id) !== String(user?.id),
+  );
 
   async function handleLogout() {
     if (!window.confirm("Are you sure you want to log out?")) {
@@ -43,7 +66,7 @@ function AppNav({ onNavigate }) {
               end={link.end}
               onClick={onNavigate}
               className={({ isActive }) =>
-                `block rounded-lg px-3 py-2 font-medium transition ${
+                `relative block rounded-lg px-3 py-2 font-medium transition ${
                   isActive
                     ? "bg-blue-50 text-blue-700"
                     : "text-slate-700 hover:bg-slate-50 hover:text-blue-600"
@@ -51,6 +74,12 @@ function AppNav({ onNavigate }) {
               }
             >
               {link.label}
+              {link.to === "/messages" && hasUnreadMessages && (
+                <span
+                  className="absolute right-3 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-red-500"
+                  aria-label="Unread messages"
+                />
+              )}
             </NavLink>
           </li>
         ))}

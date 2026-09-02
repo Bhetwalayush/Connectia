@@ -12,6 +12,7 @@ from app.graphql.mutations.follow_mutation import FollowMutations
 from app.graphql.mutations import Mutation
 from app.graphql.mutations.auth_mutation import AuthMutation
 from app.graphql.mutations.post_mutation import PostMutation
+from app.graphql.subscriptions.inbox_subscription import InboxSubscription
 from app.graphql.queries.post_query import PostQuery
 from app.graphql.mutations.comment_mutation import (
     CommentMutation
@@ -59,6 +60,7 @@ class Mutation(
 class Subscription(
     LikeSubscription,
     MessageSubscription,
+    InboxSubscription,
 ):
     pass
 

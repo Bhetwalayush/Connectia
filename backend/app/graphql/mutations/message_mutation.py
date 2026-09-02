@@ -19,6 +19,10 @@ from app.graphql.subscriptions.message_events import (
     message_event_manager
 )
 
+from app.graphql.subscriptions.inbox_events import (
+    inbox_event_manager
+)
+
 from app.graphql.types.message_event_type import (
     MessageAction
 )
@@ -28,7 +32,8 @@ from app.graphql.types.message_event_type import (
 class MessageMutation:
 
     # Send a message, creating the conversation on first contact, with
-    # broadcast to any client subscribed to this conversation
+    # broadcast to any client subscribed to this conversation, plus a
+    # personal inbox broadcast to both participants
     @strawberry.mutation
     async def send_message(
         self,
@@ -63,18 +68,36 @@ class MessageMutation:
 
             message_type = to_message_type(message)
 
+            event_payload = {
+                "conversation_id": conversation.id,
+                "action": MessageAction.SENT,
+                "actor_id": current_user.id,
+                "message": message_type,
+                "read_message_ids": None,
+            }
+
             await message_event_manager.publish(
 
                 conversation_id=conversation.id,
 
-                event={
-                    "conversation_id": conversation.id,
-                    "action": MessageAction.SENT,
-                    "actor_id": current_user.id,
-                    "message": message_type,
-                    "read_message_ids": None,
-                }
+                event=event_payload
 
+            )
+
+            inbox_payload = {
+                "conversation_id": conversation.id,
+                "action": MessageAction.SENT,
+                "actor_id": current_user.id,
+            }
+
+            await inbox_event_manager.publish(
+                conversation.user_one_id,
+                inbox_payload,
+            )
+
+            await inbox_event_manager.publish(
+                conversation.user_two_id,
+                inbox_payload,
             )
 
             return MessageResponse(
@@ -103,7 +126,8 @@ class MessageMutation:
             )
 
     # Mark all unread messages in a conversation as read, broadcasting the
-    # read receipt to the other participant
+    # read receipt to the other participant, plus a personal inbox
+    # broadcast to both participants
     @strawberry.mutation
     async def mark_messages_read(
         self,
@@ -126,7 +150,7 @@ class MessageMutation:
 
         try:
 
-            updated_messages = service.mark_as_read(
+            updated_messages, conversation = service.mark_as_read(
 
                 conversation_id=input.conversation_id,
 
@@ -136,20 +160,38 @@ class MessageMutation:
 
             if updated_messages:
 
+                event_payload = {
+                    "conversation_id": input.conversation_id,
+                    "action": MessageAction.READ,
+                    "actor_id": current_user.id,
+                    "message": None,
+                    "read_message_ids": [
+                        message.id for message in updated_messages
+                    ],
+                }
+
                 await message_event_manager.publish(
 
                     conversation_id=input.conversation_id,
 
-                    event={
-                        "conversation_id": input.conversation_id,
-                        "action": MessageAction.READ,
-                        "actor_id": current_user.id,
-                        "message": None,
-                        "read_message_ids": [
-                            message.id for message in updated_messages
-                        ],
-                    }
+                    event=event_payload
 
+                )
+
+                inbox_payload = {
+                    "conversation_id": conversation.id,
+                    "action": MessageAction.READ,
+                    "actor_id": current_user.id,
+                }
+
+                await inbox_event_manager.publish(
+                    conversation.user_one_id,
+                    inbox_payload,
+                )
+
+                await inbox_event_manager.publish(
+                    conversation.user_two_id,
+                    inbox_payload,
                 )
 
             return MessageResponse(

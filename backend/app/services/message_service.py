@@ -192,7 +192,7 @@ class MessageService:
             reader_id=current_user.id,
         )
 
-        return updated_messages
+        return updated_messages, conversation
 
     def get_conversation_with_user(
         self,

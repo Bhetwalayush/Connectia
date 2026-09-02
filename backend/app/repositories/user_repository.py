@@ -34,6 +34,29 @@ class UserRepository:
             .first()
         )
 
+    # Case-insensitive partial match on username, for search bars
+    def search_users_by_username(
+        self,
+        query: str,
+        exclude_user_id: int | None = None,
+        limit: int = 10,
+    ):
+        search_query = (
+            self.db
+            .query(User)
+            .filter(User.username.ilike(f"%{query}%"))
+        )
+
+        if exclude_user_id is not None:
+            search_query = search_query.filter(User.id != exclude_user_id)
+
+        return (
+            search_query
+            .order_by(User.username.asc())
+            .limit(limit)
+            .all()
+        )
+
     def create_user(self, user_data: UserCreate):
         user = User(
             username=user_data.username,

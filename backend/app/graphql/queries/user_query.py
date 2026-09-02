@@ -41,3 +41,20 @@ class UserQuery:
         user = UserRepository(info.context["db"]).get_user_by_id(user_id)
 
         return to_user_type(user) if user else None
+
+
+    # Search users by username, excluding the current user, for search bars
+    @strawberry.field
+    def search_users(self, info: Info, query: str) -> list[UserType]:
+
+        if not query or not query.strip():
+            return []
+
+        current_user = info.context["user"]
+
+        users = UserRepository(info.context["db"]).search_users_by_username(
+            query=query.strip(),
+            exclude_user_id=current_user.id if current_user else None,
+        )
+
+        return [to_user_type(user) for user in users]

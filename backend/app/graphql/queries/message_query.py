@@ -84,3 +84,35 @@ class MessageQuery:
         except ValueError as e:
 
             raise ValueError(str(e))
+
+    # Look up an existing conversation with a specific user, if one exists.
+    # Used when starting a chat from a profile/search — lets the frontend
+    # jump straight to history instead of assuming it's a brand-new thread.
+    @strawberry.field
+    def conversation_with_user(
+        self,
+        info: Info,
+        other_user_id: int,
+    ) -> ConversationType | None:
+
+        current_user = info.context["user"]
+
+        service = MessageService(
+            info.context["db"]
+        )
+
+        try:
+
+            conversation = service.get_conversation_with_user(
+                other_user_id=other_user_id,
+                current_user=current_user,
+            )
+
+            if not conversation:
+                return None
+
+            return to_conversation_type(conversation, current_user.id)
+
+        except ValueError as e:
+
+            raise ValueError(str(e))

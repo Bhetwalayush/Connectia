@@ -222,6 +222,17 @@ function Chat() {
           };
         },
       );
+
+      // If the incoming message is from the other person and I'm actively
+      // viewing this conversation, mark it read immediately instead of
+      // waiting for a future mount/re-visit.
+      if (String(event.actorId) !== String(user?.id)) {
+        markMessagesRead({ variables: { input: { conversationId } } }).catch(
+          () => {
+            // non-critical; ignore silently
+          },
+        );
+      }
     } catch {
       setMessage("Could not send message. Please try again.");
     }

@@ -7,7 +7,10 @@ import {
   useSubscription,
   useApolloClient,
 } from "@apollo/client/react";
-import { GET_MESSAGES } from "../../graphql/queries/messageQueries";
+import {
+  GET_MESSAGES,
+  GET_CONVERSATION_WITH_USER,
+} from "../../graphql/queries/messageQueries";
 import {
   SEND_MESSAGE,
   MARK_MESSAGES_READ,
@@ -46,6 +49,19 @@ function Chat() {
     variables: { conversationId, limit: PAGE_SIZE },
     skip: !conversationId,
   });
+
+  const { data: existingConversationData, loading: checkingExisting } =
+    useQuery(GET_CONVERSATION_WITH_USER, {
+      variables: { otherUserId: Number(recipientId) },
+      skip: !recipientId || conversationId != null,
+    });
+
+  useEffect(() => {
+    const existingId = existingConversationData?.conversationWithUser?.id;
+    if (existingId) {
+      navigate(`/messages/${existingId}`, { replace: true });
+    }
+  }, [existingConversationData, navigate]);
 
   const [sendMessage, { loading: sending }] = useMutation(SEND_MESSAGE);
   const [markMessagesRead] = useMutation(MARK_MESSAGES_READ);
@@ -217,6 +233,13 @@ function Chat() {
     : recipientData?.user;
 
   if (conversationId && loading) {
+    return (
+      <div className="mx-auto max-w-2xl p-4">
+        <div className="h-64 animate-pulse rounded-xl border bg-white" />
+      </div>
+    );
+  }
+  if (!conversationId && recipientId && checkingExisting) {
     return (
       <div className="mx-auto max-w-2xl p-4">
         <div className="h-64 animate-pulse rounded-xl border bg-white" />

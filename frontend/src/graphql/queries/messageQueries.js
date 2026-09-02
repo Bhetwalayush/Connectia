@@ -43,3 +43,11 @@ export const GET_MESSAGES = gql`
     }
   }
 `;
+
+export const GET_CONVERSATION_WITH_USER = gql`
+  query GetConversationWithUser($otherUserId: Int!) {
+    conversationWithUser(otherUserId: $otherUserId) {
+      id
+    }
+  }
+`;

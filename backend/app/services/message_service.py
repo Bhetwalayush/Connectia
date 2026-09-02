@@ -193,3 +193,22 @@ class MessageService:
         )
 
         return updated_messages
+
+    def get_conversation_with_user(
+        self,
+        other_user_id: int,
+        current_user,
+    ):
+
+        if current_user is None:
+
+            raise ValueError(
+                "Authentication required."
+            )
+
+        conversation = self.conversation_repository.get_conversation_between(
+            current_user.id,
+            other_user_id,
+        )
+
+        return conversation

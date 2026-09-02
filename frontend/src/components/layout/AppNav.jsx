@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
+import ProfileSearch from "./ProfileSearch";
 
 const links = [
   { to: "/", label: "Home", end: true },
@@ -14,6 +15,7 @@ function AppNav({ onNavigate }) {
   const { logout, user } = useAuth();
   const [loggingOut, setLoggingOut] = useState(false);
   const [error, setError] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
   const userName = user?.username || user?.email;
 
   async function handleLogout() {
@@ -54,6 +56,27 @@ function AppNav({ onNavigate }) {
         ))}
       </ul>
 
+      <button
+        type="button"
+        onClick={() => setShowSearch(true)}
+        className="mt-2 flex items-center gap-3 rounded-lg px-3 py-2 text-left font-medium text-slate-700 transition hover:bg-slate-50 hover:text-blue-600"
+      >
+        <svg
+          className="h-5 w-5 shrink-0"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M21 21l-4.35-4.35M17 10.5A6.5 6.5 0 1 1 4 10.5a6.5 6.5 0 0 1 13 0Z"
+          />
+        </svg>
+        Search
+      </button>
+
       <div className="mt-auto pt-6">
         {error && (
           <p className="mb-2 text-xs text-red-600" role="alert">
@@ -69,9 +92,13 @@ function AppNav({ onNavigate }) {
           {loggingOut ? "Logging out..." : "Logout"}
         </button>
         {userName && (
-          <p className="mt-3 truncate px-1 text-sm text-slate-500">{userName}</p>
+          <p className="mt-3 truncate px-1 text-sm text-slate-500">
+            {userName}
+          </p>
         )}
       </div>
+
+      {showSearch && <ProfileSearch onClose={() => setShowSearch(false)} />}
     </div>
   );
 }

@@ -19,6 +19,10 @@ from app.graphql.types.like_event_type import (
     LikeAction
 )
 
+from app.services.notification_service import NotificationService
+from app.models.notification import NotificationType
+from app.graphql.subscriptions.notification_events import notification_event_manager
+
 @strawberry.type
 class LikeMutation:
 
@@ -52,6 +56,28 @@ class LikeMutation:
                 current_user=current_user
 
             )
+
+            notification_service = NotificationService(
+                info.context["db"]
+            )
+
+            post = service.post_repository.get_post_by_id(
+                input.post_id
+            )
+
+            notification = notification_service.create_notification(
+                recipient_id=post.user_id,
+                actor_id=current_user.id,
+                notification_type=NotificationType.LIKE,
+                post_id=post.id,
+            )
+
+            if notification:
+
+                await notification_event_manager.publish(
+                    post.user_id,
+                    {"notification_id": notification.id},
+                )
 
             like_count = service.get_like_count(
                 input.post_id

@@ -23,14 +23,16 @@ from app.graphql.mappers.comment_mapper import (
 from app.services.comment_service import (
     CommentService
 )
-
+from app.services.notification_service import NotificationService
+from app.models.notification import NotificationType
+from app.graphql.subscriptions.notification_events import notification_event_manager
 
 @strawberry.type
 class CommentMutation:
 
     # Create new comment on a post
     @strawberry.mutation
-    def create_comment(
+    async def create_comment(
         self,
         info: Info,
         input: CreateCommentInput
@@ -60,6 +62,24 @@ class CommentMutation:
                 current_user=current_user
 
             )
+
+            notification_service = NotificationService(
+                info.context["db"]
+            )
+
+            notification = notification_service.create_notification(
+                recipient_id=comment.post.user_id,
+                actor_id=current_user.id,
+                notification_type=NotificationType.COMMENT,
+                post_id=comment.post_id,
+            )
+
+            if notification:
+
+                await notification_event_manager.publish(
+                    comment.post.user_id,
+                    {"notification_id": notification.id},
+                )
 
             return CommentResponse(
 

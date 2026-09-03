@@ -111,8 +111,8 @@ class MessageEventManager:
             await queue.put(event)
 
 
-#For managing inbox events, such as new messages or notifications
-class InboxEventManager:
+#For managing notification events, such as new messages or notifications
+class NotificationEventManager:
 
     def __init__(self):
 

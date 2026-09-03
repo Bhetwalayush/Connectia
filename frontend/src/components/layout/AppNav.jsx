@@ -3,7 +3,9 @@ import { NavLink } from "react-router-dom";
 import { useQuery, useSubscription } from "@apollo/client/react";
 import { useAuth } from "../../context/useAuth";
 import { GET_CONVERSATIONS } from "../../graphql/queries/messageQueries";
+import { GET_NOTIFICATIONS } from "../../graphql/queries/notificationQueries";
 import { INBOX_UPDATED_SUBSCRIPTION } from "../../graphql/subscriptions/inboxSubscription";
+import { NOTIFICATIONS_UPDATED_SUBSCRIPTION } from "../../graphql/subscriptions/notificationSubscription";
 import ProfileSearch from "./ProfileSearch";
 
 const links = [
@@ -23,14 +25,27 @@ function AppNav({ onNavigate }) {
 
   const { data: conversationsData, refetch: refetchConversations } = useQuery(
     GET_CONVERSATIONS,
-    { skip: !user },
+    { skip: !user?.id },
+  );
+
+  const { data: notificationsData, refetch: refetchNotifications } = useQuery(
+    GET_NOTIFICATIONS,
+    { skip: !user?.id },
   );
 
   useSubscription(INBOX_UPDATED_SUBSCRIPTION, {
     variables: { userId: user?.id },
-    skip: !user,
+    skip: !user?.id,
     onData: () => {
       refetchConversations();
+    },
+  });
+
+  useSubscription(NOTIFICATIONS_UPDATED_SUBSCRIPTION, {
+    variables: { userId: user?.id },
+    skip: !user?.id,
+    onData: () => {
+      refetchNotifications();
     },
   });
 
@@ -39,6 +54,10 @@ function AppNav({ onNavigate }) {
       conversation.lastMessage &&
       !conversation.lastMessage.readAt &&
       String(conversation.lastMessage.sender.id) !== String(user?.id),
+  );
+
+  const hasUnreadNotifications = (notificationsData?.notifications ?? []).some(
+    (notification) => !notification.readAt,
   );
 
   async function handleLogout() {
@@ -78,6 +97,12 @@ function AppNav({ onNavigate }) {
                 <span
                   className="absolute right-3 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-red-500"
                   aria-label="Unread messages"
+                />
+              )}
+              {link.to === "/notifications" && hasUnreadNotifications && (
+                <span
+                  className="absolute right-3 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-red-500"
+                  aria-label="Unread notifications"
                 />
               )}
             </NavLink>

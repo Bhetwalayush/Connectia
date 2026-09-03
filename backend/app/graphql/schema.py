@@ -22,6 +22,9 @@ from app.graphql.subscriptions.like_subscription import (
 )
 from app.graphql.queries.comment_query import CommentQuery
 from app.graphql.subscriptions.message_subscription import MessageSubscription
+from app.graphql.queries.notification_query import NotificationQuery
+from app.graphql.mutations.notification_mutation import NotificationMutation
+from app.graphql.subscriptions.notification_subscription import NotificationSubscription
 
 # Combine all read operations (queries)
 @strawberry.type
@@ -41,6 +44,8 @@ class Query(
 
     MessageQuery,
     
+    NotificationQuery,
+    
 
 ):
     pass
@@ -53,6 +58,7 @@ class Mutation(
     LikeMutation,
     FollowMutations,
     MessageMutation,
+    NotificationMutation,
 ):
     pass
 
@@ -61,6 +67,7 @@ class Subscription(
     LikeSubscription,
     MessageSubscription,
     InboxSubscription,
+    NotificationSubscription,
 ):
     pass
 

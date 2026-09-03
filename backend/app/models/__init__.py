@@ -5,3 +5,4 @@ from .like import Like
 from .follow import Follow
 from .conversation import Conversation
 from .message import Message
+from .notification import Notification

@@ -77,9 +77,15 @@ function Profile() {
               </Link>
             ) : (
               <div className="flex gap-2">
+                {/* <FollowButton
+                  userId={profile.id}
+                  isFollowing={profile.isFollowing}
+                  onToggled={refreshProfile}
+                /> */}
                 <FollowButton
                   userId={profile.id}
                   isFollowing={profile.isFollowing}
+                  followsYou={profile.followsYou}
                   onToggled={refreshProfile}
                 />
                 <button

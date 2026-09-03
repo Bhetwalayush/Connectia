@@ -15,6 +15,7 @@ import ProtectedRoutes from "./ProtectedRoutes";
 import PublicRoutes from "./PubliRoutes";
 import Chat from "../pages/Messages/Chat";
 import Inbox from "../pages/Messages/inbox";
+import PostDetail from "../pages/Post/PostDetail";
 // Define all application routes with access control
 function AppRoutes() {
   return (
@@ -30,6 +31,7 @@ function AppRoutes() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/:userId" element={<Profile />} />
           <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/post/:postId" element={<PostDetail />} />
         </Route>
       </Route>
 

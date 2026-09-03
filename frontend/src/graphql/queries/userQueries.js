@@ -19,6 +19,7 @@ export const GET_PROFILE = gql`
       followersCount
       followingCount
       isFollowing
+      followsYou
     }
   }
 `;

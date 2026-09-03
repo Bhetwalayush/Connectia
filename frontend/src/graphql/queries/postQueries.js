@@ -41,3 +41,23 @@ export const GET_POSTS_BY_USER = gql`
     }
   }
 `;
+
+export const GET_POST = gql`
+  query GetPost($postId: Int!) {
+    post(postId: $postId) {
+      id
+      content
+      imageUrl
+      createdAt
+      updatedAt
+      likeCount
+      likedByMe
+      commentCount
+      author {
+        id
+        username
+        email
+      }
+    }
+  }
+`;

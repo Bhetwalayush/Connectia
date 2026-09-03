@@ -4,7 +4,7 @@ import strawberry
 
 from app.graphql.types.inbox_event_type import InboxEvent
 
-from app.graphql.subscriptions.inbox_events import (
+from app.graphql.subscriptions.notification_events import (
     inbox_event_manager
 )
 

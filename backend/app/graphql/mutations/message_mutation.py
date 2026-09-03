@@ -19,7 +19,7 @@ from app.graphql.subscriptions.message_events import (
     message_event_manager
 )
 
-from app.graphql.subscriptions.inbox_events import (
+from app.graphql.subscriptions.notification_events import (
     inbox_event_manager
 )
 

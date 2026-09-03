@@ -30,3 +30,14 @@ class UserType:
             return False
         from app.services.follow_service import is_following as check
         return check(db, current_user.id, self.id)
+
+    
+    # Does this profile's user follow the current viewer back?
+    @strawberry.field
+    def follows_you(self, info: Info) -> bool:
+        db = info.context["db"]
+        current_user = info.context["current_user"]
+        if not current_user:
+            return False
+        from app.services.follow_service import is_following as check
+        return check(db, self.id, current_user.id)

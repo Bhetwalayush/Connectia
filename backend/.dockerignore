@@ -1,0 +1,56 @@
+# Version control
+.git
+.gitignore
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+
+# Environment variables (secrets!)
+.env
+.env.*
+!.env.example
+
+# Testing/cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+tests/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+
+# Docker-related (don't need these inside the image itself)
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Docs / misc
+README.md
+*.md
+docs/
+
+# CI/CD
+.github/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Uploaded/user files (if they shouldn't ship in the image)
+uploads/*
+!uploads/.gitkeep

@@ -25,7 +25,7 @@ from app.graphql.subscriptions.message_subscription import MessageSubscription
 from app.graphql.queries.notification_query import NotificationQuery
 from app.graphql.mutations.notification_mutation import NotificationMutation
 from app.graphql.subscriptions.notification_subscription import NotificationSubscription
-
+from app.graphql.mutations.user_mutation import UserMutation    
 # Combine all read operations (queries)
 @strawberry.type
 class Query(
@@ -59,6 +59,7 @@ class Mutation(
     FollowMutations,
     MessageMutation,
     NotificationMutation,
+    UserMutation
 ):
     pass
 

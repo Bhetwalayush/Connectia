@@ -6,6 +6,7 @@ export const GET_CURRENT_USER = gql`
       id
       email
       username
+      bio
     }
   }
 `;
@@ -16,6 +17,7 @@ export const GET_PROFILE = gql`
       id
       username
       email
+      bio
       followersCount
       followingCount
       isFollowing

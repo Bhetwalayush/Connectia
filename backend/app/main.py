@@ -1,4 +1,6 @@
 # FastAPI application with GraphQL support for Connectia social platform
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from strawberry.fastapi import GraphQLRouter
@@ -6,20 +8,21 @@ from strawberry.subscriptions import (
     GRAPHQL_TRANSPORT_WS_PROTOCOL,
     GRAPHQL_WS_PROTOCOL,
 )
+from dotenv import load_dotenv
 
 from app.graphql.schema import schema
 from app.graphql.context import get_context
 
+load_dotenv()
 
 app = FastAPI()
 
 # CORS configuration for frontend at localhost:5173
-origins = [
-    "http://localhost:5173",
-    "ws://localhost:5173",
-    "http://10.1.186.161:5173",
-    "ws://10.1.186.161:5173",
-]
+# origins = [
+#             load_dotenv().get("CORS_ORIGINS").split(",")
+# ]
+
+origins = os.getenv("CORS_ORIGINS", "").split(",")
 
 app.add_middleware(
     CORSMiddleware,

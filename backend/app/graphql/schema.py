@@ -26,6 +26,9 @@ from app.graphql.queries.notification_query import NotificationQuery
 from app.graphql.mutations.notification_mutation import NotificationMutation
 from app.graphql.subscriptions.notification_subscription import NotificationSubscription
 from app.graphql.mutations.user_mutation import UserMutation    
+from app.graphql.queries.global_chat_query import GlobalChatQuery
+from app.graphql.mutations.global_chat_mutation import GlobalChatMutation
+from app.graphql.subscriptions.global_chat_subscription import GlobalChatSubscription
 # Combine all read operations (queries)
 @strawberry.type
 class Query(
@@ -45,6 +48,8 @@ class Query(
     MessageQuery,
     
     NotificationQuery,
+
+    GlobalChatQuery,
     
 
 ):
@@ -59,7 +64,8 @@ class Mutation(
     FollowMutations,
     MessageMutation,
     NotificationMutation,
-    UserMutation
+    UserMutation,
+    GlobalChatMutation,
 ):
     pass
 
@@ -69,6 +75,7 @@ class Subscription(
     MessageSubscription,
     InboxSubscription,
     NotificationSubscription,
+    GlobalChatSubscription,
 ):
     pass
 

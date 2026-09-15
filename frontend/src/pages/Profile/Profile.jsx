@@ -67,6 +67,11 @@ function Profile() {
                 {profile.username}
               </h1>
               <p className="mt-1 text-sm text-slate-500">{profile.email}</p>
+              {profile.bio && (
+                <p className="mt-2 max-w-md whitespace-pre-wrap break-words text-sm text-slate-700">
+                  {profile.bio}
+                </p>
+              )}
             </div>
             {isOwnProfile ? (
               <Link

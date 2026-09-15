@@ -1,7 +1,7 @@
 // Post card component - Display post with edit/delete/like/comment options
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LikeButton from "./LikeButton";
 import useLikeSubscription from "../../hooks/useLikeSubscription";
 import CommentSection from "../comment/CommentSection";
@@ -18,6 +18,7 @@ function PostCard({ post }) {
   const [content, setContent] = useState(post.content);
   const [imageUrl, setImageUrl] = useState(post.imageUrl || "");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
   const [showComments, setShowComments] = useState(false);
   // Refetch posts list after mutation
   const [updatePost, { loading: updating }] = useMutation(UPDATE_POST, {
@@ -32,6 +33,11 @@ function PostCard({ post }) {
   // Only post author can edit/delete
   const isOwner = String(user?.id) === String(post.author.id);
 
+  function goToPost(event) {
+    // Don't navigate if the click originated from an interactive element
+    if (event.target.closest("button, a, input, textarea, form")) return;
+    navigate(`/post/${post.id}`);
+  }
   // Update post content
   // Update Image url
   async function handleUpdate(event) {
@@ -137,15 +143,16 @@ function PostCard({ post }) {
           </button>
         </form>
       ) : (
-        <p className="mt-3">{post.content}</p>
-      )}
-
-      {post.imageUrl && (
-        <img
-          src={post.imageUrl}
-          alt="Post"
-          className="mt-4 w-full rounded-lg"
-        />
+        <div onClick={goToPost} className="cursor-pointer">
+          <p className="mt-3">{post.content}</p>
+          {post.imageUrl && (
+            <img
+              src={post.imageUrl}
+              alt="Post"
+              className="mt-4 w-full rounded-lg"
+            />
+          )}
+        </div>
       )}
 
       <div className="mt-4 flex items-center gap-6">

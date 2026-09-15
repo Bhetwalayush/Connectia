@@ -6,3 +6,4 @@ from .follow import Follow
 from .conversation import Conversation
 from .message import Message
 from .notification import Notification
+from .global_message import GlobalMessage

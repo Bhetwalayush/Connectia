@@ -49,6 +49,11 @@ function CommentSection({ postId, showAll, setShowAll }) {
       return;
     }
 
+    if (content.length > 1000) {
+      setMessage("Comment cannot exceed 1000 characters.");
+      return;
+    }
+
     try {
       const { data: result } = await createComment({
         variables: {
@@ -87,6 +92,10 @@ function CommentSection({ postId, showAll, setShowAll }) {
     event.preventDefault();
     if (!editingContent.trim()) {
       setMessage("Comment cannot be empty.");
+      return;
+    }
+    if (editingContent.length > 1000) {
+      setMessage("Comment cannot exceed 1000 characters.");
       return;
     }
 
@@ -172,14 +181,22 @@ function CommentSection({ postId, showAll, setShowAll }) {
           )}
         </div>
         {editingId === comment.id ? (
-          <form onSubmit={handleUpdate} className="mt-2 space-y-2">
-            <input
+          <form onSubmit={handleUpdate} className="mt-2 space-y-1.5">
+            <textarea
               value={editingContent}
               maxLength={1000}
+              rows={2}
               onChange={(event) => setEditingContent(event.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              className="w-full resize-none whitespace-pre-wrap break-words rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               aria-label="Edit comment"
             />
+            <p
+              className={`text-right text-xs ${
+                editingContent.length >= 1000 ? "text-red-500" : "text-gray-400"
+              }`}
+            >
+              {editingContent.length}/1000
+            </p>
             <div className="flex gap-2">
               <button
                 type="submit"
@@ -198,7 +215,9 @@ function CommentSection({ postId, showAll, setShowAll }) {
             </div>
           </form>
         ) : (
-          <p className="text-sm text-gray-700">{comment.content}</p>
+          <p className="whitespace-pre-wrap break-words text-sm text-gray-700">
+            {comment.content}
+          </p>
         )}
       </div>
     );
@@ -231,25 +250,32 @@ function CommentSection({ postId, showAll, setShowAll }) {
         </button>
       )}
 
-      <form
-        onSubmit={handleSubmit}
-        className="mt-3 flex flex-col gap-2 sm:flex-row"
-      >
-        <input
-          value={content}
-          maxLength={1000}
-          onChange={(event) => setContent(event.target.value)}
-          placeholder="Write a comment..."
-          aria-label="Write a comment"
-          className="min-w-0 flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-        />
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700 disabled:opacity-60"
+      <form onSubmit={handleSubmit} className="mt-3 space-y-1.5">
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <textarea
+            value={content}
+            maxLength={1000}
+            rows={1}
+            onChange={(event) => setContent(event.target.value)}
+            placeholder="Write a comment..."
+            aria-label="Write a comment"
+            className="min-w-0 flex-1 resize-none whitespace-pre-wrap break-words rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          />
+          <button
+            type="submit"
+            disabled={submitting || !content.trim() || content.length > 1000}
+            className="shrink-0 rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700 disabled:opacity-60"
+          >
+            {submitting ? "Adding..." : "Comment"}
+          </button>
+        </div>
+        <p
+          className={`text-right text-xs ${
+            content.length >= 1000 ? "text-red-500" : "text-gray-400"
+          }`}
         >
-          {submitting ? "Adding..." : "Comment"}
-        </button>
+          {content.length}/1000
+        </p>
       </form>
       {message && (
         <p className="mt-2 text-xs text-red-600" role="status">

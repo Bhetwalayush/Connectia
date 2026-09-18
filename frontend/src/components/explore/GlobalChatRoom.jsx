@@ -148,7 +148,7 @@ function GlobalChatRoom() {
   }
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-2rem)] max-w-2xl flex-col overflow-hidden rounded-2xl border bg-white shadow-sm">
+    <div className="mx-auto flex h-[80vh] max-w-2xl flex-col overflow-hidden rounded-2xl border bg-white shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between border-b bg-gradient-to-r from-indigo-600 to-purple-500 px-5 py-4">
         <div>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 
 function Navbar({ menuOpen, onMenuToggle }) {
@@ -17,7 +18,10 @@ function Navbar({ menuOpen, onMenuToggle }) {
           <HiOutlineMenu className="h-6 w-6" />
         )}
       </button>
-      <h1 className="text-2xl font-bold text-blue-600">Connectia</h1>
+      <Link to="/" className="flex items-center gap-2">
+        <img src="/logo.png" alt="" className="h-8 w-8 rounded-lg" />
+        <span className="text-2xl font-bold text-blue-600">Connectia</span>
+      </Link>
     </nav>
   );
 }

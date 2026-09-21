@@ -20,6 +20,7 @@ services:
       - ./backend/.env
     volumes:
       - ./backend/alembic/versions:/code/alembic/versions
+      - uploads_data:/code/uploads
     depends_on:
       - db
 
@@ -36,3 +37,4 @@ services:
 
 volumes:
   pgdata:
+  uploads_data:

@@ -8,13 +8,15 @@ import AuthButton from "../../components/auth/AuthButton";
 
 import { validateEmail, validatePassword } from "../../utils/validators";
 import { REGISTER } from "../../graphql/mutations/authMutations";
-
+import ProfilePicture from "../../components/common/ProfilePicture";
+import ImageUploadButton from "../../components/common/ImageUploadButton";
 function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [profilePictureUrl, setProfilePictureUrl] = useState("");
 
   const [register, { loading }] = useMutation(REGISTER);
   const navigate = useNavigate();
@@ -44,7 +46,14 @@ function Register() {
 
     try {
       const { data } = await register({
-        variables: { input: { username, email, password } },
+        variables: {
+          input: {
+            username,
+            email,
+            password,
+            profilePictureUrl: profilePictureUrl || null,
+          },
+        },
       });
 
       if (!data?.register?.success) {
@@ -118,6 +127,30 @@ function Register() {
                 {error}
               </p>
             )}
+
+            <div className="flex justify-center">
+              <div className="relative">
+                <ProfilePicture src={profilePictureUrl} size="xl" />
+                <ImageUploadButton
+                  onUploaded={setProfilePictureUrl}
+                  className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-indigo-600 text-white shadow-sm transition hover:bg-indigo-700"
+                >
+                  <svg
+                    className="h-3.5 w-3.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={3}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
+                  </svg>
+                </ImageUploadButton>
+              </div>
+            </div>
 
             <div>
               <label className="mb-1.5 block text-sm font-medium text-slate-700">

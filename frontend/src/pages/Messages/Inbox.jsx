@@ -6,7 +6,8 @@ import { useQuery } from "@apollo/client/react";
 import { GET_CONVERSATIONS } from "../../graphql/queries/messageQueries";
 import { useAuth } from "../../context/useAuth";
 import MessageSearch from "../../components/message/MessageSearch";
-import UserAvatar from "../../components/common/UserAvatar";
+// import UserAvatar from "../../components/common/UserAvatar";
+import ProfilePicture from "../../components/common/ProfilePicture";
 
 // Accent used for unread state — dot, tint wash, and timestamp.
 // One color, used consistently, rather than default Tailwind blue-600.
@@ -157,8 +158,13 @@ function Inbox() {
                 style={isUnread ? { backgroundColor: ACCENT_TINT } : undefined}
               >
                 {/* Avatar */}
-                <UserAvatar
+                {/* <UserAvatar
                   username={conversation.otherUser.username}
+                  size="lg"
+                /> */}
+                <ProfilePicture
+                  src={conversation.otherUser.profilePictureUrl}
+                  alt={conversation.otherUser.username}
                   size="lg"
                 />
 

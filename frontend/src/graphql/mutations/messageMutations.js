@@ -14,6 +14,7 @@ export const SEND_MESSAGE = gql`
         sender {
           id
           username
+          profilePictureUrl
         }
       }
       conversation {
@@ -23,6 +24,7 @@ export const SEND_MESSAGE = gql`
           id
           username
           email
+          profilePictureUrl
         }
       }
     }

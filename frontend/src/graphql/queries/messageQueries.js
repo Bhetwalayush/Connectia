@@ -9,6 +9,7 @@ export const GET_CONVERSATIONS = gql`
         id
         username
         email
+        profilePictureUrl
       }
       lastMessage {
         id

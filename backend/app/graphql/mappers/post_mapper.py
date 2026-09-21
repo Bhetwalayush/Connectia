@@ -1,6 +1,6 @@
 from app.graphql.types.post_type import PostType
 from app.graphql.types.user_type import UserType
-
+from app.graphql.queries.user_query import to_user_type
 
 def to_post_type(post):
 
@@ -16,15 +16,18 @@ def to_post_type(post):
 
         updated_at=post.updated_at,
 
-        author=UserType(
+        # author=UserType(
 
-            id=post.author.id,
+        #     id=post.author.id,
 
-            username=post.author.username,
+        #     username=post.author.username,
 
-            email=post.author.email
+        #     email=post.author.email
 
-        ),
+        # ),
+
+        author=to_user_type(post.author),
+
         comment_count=len(post.comments)
 
     )

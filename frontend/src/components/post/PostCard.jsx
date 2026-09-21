@@ -11,6 +11,8 @@ import {
   DELETE_POST,
 } from "../../graphql/mutations/postMutations";
 import { GET_POSTS } from "../../graphql/queries/postQueries";
+import ImageUploadButton from "../common/ImageUploadButton";
+import ProfilePicture from "../common/ProfilePicture";
 
 function PostCard({ post }) {
   const { user } = useAuth();
@@ -93,8 +95,13 @@ function PostCard({ post }) {
       <div className="flex items-start justify-between gap-3">
         <Link
           to={`/profile/${post.author.id}`}
-          className="font-semibold hover:text-blue-600"
+          className="flex items-center gap-2 font-semibold hover:text-blue-600"
         >
+          <ProfilePicture
+            src={post.author.profilePictureUrl}
+            alt={post.author.username}
+            size="sm"
+          />
           {post.author.username}
         </Link>
         {isOwner && (
@@ -127,13 +134,33 @@ function PostCard({ post }) {
             rows={4}
             className="w-full resize-none rounded-lg border border-gray-200 p-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           />
-          <input
-            type="text"
-            value={imageUrl || ""}
-            onChange={(event) => setImageUrl(event.target.value)}
-            placeholder="Image url optional"
-            className="w-full rounded-lg border border-gray-200 p-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-          />
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={imageUrl || ""}
+              onChange={(event) => setImageUrl(event.target.value)}
+              placeholder="Image url optional"
+              className="min-w-0 flex-1 rounded-lg border border-gray-200 p-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            />
+            <ImageUploadButton
+              onUploaded={setImageUrl}
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
+            >
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.75}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M2.25 15.75l5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M2.25 4.5h19.5a1.5 1.5 0 0 1 1.5 1.5v13.5a1.5 1.5 0 0 1-1.5 1.5H2.25a1.5 1.5 0 0 1-1.5-1.5V6a1.5 1.5 0 0 1 1.5-1.5Z"
+                />
+              </svg>
+            </ImageUploadButton>
+          </div>
           <button
             type="submit"
             disabled={updating}

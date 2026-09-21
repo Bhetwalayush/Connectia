@@ -2,6 +2,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from app.models.post import Post
+from app.models.notification import Notification
 
 
 class PostRepository:
@@ -84,8 +85,13 @@ class PostRepository:
         self,
         post: Post
     ):
+        # Notifications referencing this post have no cascade at the DB
+        # level, so they must be cleared first or the delete violates
+        # the foreign key constraint.
+        self.db.query(Notification).filter(
+            Notification.post_id == post.id
+        ).delete()
+
         self.db.delete(post)
 
         self.db.commit()
-
-    

@@ -17,6 +17,7 @@ export const GET_POSTS = gql`
         id
         username
         email
+        profilePictureUrl
       }
     }
   }
@@ -37,6 +38,7 @@ export const GET_POSTS_BY_USER = gql`
         id
         username
         email
+        profilePictureUrl
       }
     }
   }
@@ -57,6 +59,7 @@ export const GET_POST = gql`
         id
         username
         email
+        profilePictureUrl
       }
     }
   }

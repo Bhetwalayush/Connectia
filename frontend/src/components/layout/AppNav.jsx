@@ -8,6 +8,7 @@ import { GET_NOTIFICATIONS } from "../../graphql/queries/notificationQueries";
 import { INBOX_UPDATED_SUBSCRIPTION } from "../../graphql/subscriptions/inboxSubscription";
 import { NOTIFICATIONS_UPDATED_SUBSCRIPTION } from "../../graphql/subscriptions/notificationSubscription";
 import ProfileSearch from "./ProfileSearch";
+import ProfilePicture from "../common/ProfilePicture";
 
 const links = [
   { to: "/", label: "Home", end: true },
@@ -194,9 +195,14 @@ function AppNav({ onNavigate, onOpenSuggestions }) {
           {loggingOut ? "Logging out..." : "Logout"}
         </button>
         {userName && (
-          <p className="mt-3 truncate px-1 text-sm text-slate-500">
-            {userName}
-          </p>
+          <div className="mt-3 flex items-center gap-2 px-1">
+            <ProfilePicture
+              src={user?.profilePictureUrl}
+              alt={userName}
+              size="sm"
+            />
+            <p className="truncate text-sm text-slate-500">{userName}</p>
+          </div>
         )}
       </div>
 

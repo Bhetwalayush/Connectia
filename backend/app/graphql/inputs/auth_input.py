@@ -6,6 +6,7 @@ class RegisterInput:
     username: str
     email: str
     password: str
+    profile_picture_url: str | None = None
 
 @strawberry.input
 class LoginInput:

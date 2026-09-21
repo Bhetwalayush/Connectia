@@ -8,6 +8,8 @@ class UpdateProfileInput:
 
     bio: str | None = None
 
+    profile_picture_url: str | None = None
+
 
 @strawberry.input
 class ChangePasswordInput:

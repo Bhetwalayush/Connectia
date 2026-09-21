@@ -1,5 +1,5 @@
 ﻿// Edit profile page - update username/bio, and change password
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client/react";
 import { useAuth } from "../../context/useAuth";
@@ -8,6 +8,8 @@ import {
   UPDATE_PROFILE,
   CHANGE_PASSWORD,
 } from "../../graphql/mutations/userMutations";
+import ImageUploadButton from "../../components/common/ImageUploadButton";
+import ProfilePicture from "../../components/common/ProfilePicture";
 
 function EditProfile() {
   const { user, refetch } = useAuth();
@@ -17,7 +19,9 @@ function EditProfile() {
   const [bio, setBio] = useState(user?.bio || "");
   const [profileMessage, setProfileMessage] = useState("");
   const [profileError, setProfileError] = useState("");
-
+  const [profilePictureUrl, setProfilePictureUrl] = useState(
+    user?.profilePictureUrl || "",
+  );
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
@@ -31,11 +35,23 @@ function EditProfile() {
   const [changePassword, { loading: savingPassword }] =
     useMutation(CHANGE_PASSWORD);
 
-  const initial = (username || user?.username || "?").charAt(0).toUpperCase();
+  // const initial = (username || user?.username || "?").charAt(0).toUpperCase();
   const bioLength = bio.length;
   const isDirty =
     username.trim() !== (user?.username || "") ||
-    bio.trim() !== (user?.bio || "");
+    bio.trim() !== (user?.bio || "") ||
+    profilePictureUrl !== (user?.profilePictureUrl || "");
+
+  const initializedRef = useRef(false);
+
+  useEffect(() => {
+    if (user && !initializedRef.current) {
+      setUsername(user.username || "");
+      setBio(user.bio || "");
+      setProfilePictureUrl(user.profilePictureUrl || "");
+      initializedRef.current = true;
+    }
+  }, [user]);
 
   async function handleProfileSubmit(event) {
     event.preventDefault();
@@ -48,6 +64,7 @@ function EditProfile() {
           input: {
             username: username.trim(),
             bio: bio.trim(),
+            profilePictureUrl: profilePictureUrl || null,
           },
         },
       });
@@ -108,8 +125,30 @@ function EditProfile() {
         <div className="h-24 bg-gradient-to-r from-blue-600 to-cyan-400" />
         <div className="px-6 pb-6">
           <div className="-mt-10 flex items-end justify-between">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-blue-100 text-2xl font-bold text-blue-700">
-              {initial}
+            <div className="relative">
+              <ProfilePicture
+                src={profilePictureUrl}
+                alt={username}
+                size="xl"
+              />
+              <ImageUploadButton
+                onUploaded={setProfilePictureUrl}
+                className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-blue-600 text-white shadow-sm transition hover:bg-blue-700"
+              >
+                <svg
+                  className="h-3.5 w-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={3}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </ImageUploadButton>
             </div>
             <button
               type="button"

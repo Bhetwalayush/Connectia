@@ -12,6 +12,8 @@ class UserType:
 
     bio: str | None = None
 
+    profile_picture_url: str | None = None
+
     @strawberry.field
     def followers_count(self, info: Info) -> int:
         db = info.context["db"]

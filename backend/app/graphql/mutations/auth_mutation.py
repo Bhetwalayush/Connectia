@@ -31,7 +31,8 @@ class AuthMutation:
             user_data = UserCreate(
                 username=input.username,
                 email=input.email,
-                password=input.password
+                password=input.password,
+                profile_picture_url=input.profile_picture_url,
             )
 
             user = service.register_user(user_data)

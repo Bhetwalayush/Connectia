@@ -61,7 +61,8 @@ class UserRepository:
         user = User(
             username=user_data.username,
             email=user_data.email,
-            password=user_data.password
+            password=user_data.password,
+            profile_picture_url=user_data.profile_picture_url,
         )
 
         self.db.add(user)

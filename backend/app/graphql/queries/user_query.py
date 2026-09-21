@@ -13,6 +13,7 @@ def to_user_type(user) -> UserType:
         username=user.username,
         email=user.email,
         bio=user.bio,
+        profile_picture_url=user.profile_picture_url,
     )
 
 

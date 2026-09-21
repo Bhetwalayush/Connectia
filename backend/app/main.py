@@ -9,7 +9,8 @@ from strawberry.subscriptions import (
     GRAPHQL_WS_PROTOCOL,
 )
 from dotenv import load_dotenv
-
+from fastapi.staticfiles import StaticFiles
+from app.routers.upload import router as upload_router
 from app.graphql.schema import schema
 from app.graphql.context import get_context
 
@@ -46,3 +47,5 @@ app.include_router(
     graphql_app,
     prefix="/graphql",
 )
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+app.include_router(upload_router)

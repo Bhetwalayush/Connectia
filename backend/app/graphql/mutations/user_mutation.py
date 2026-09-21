@@ -48,6 +48,8 @@ class UserMutation:
 
                 bio=input.bio,
 
+                profile_picture_url=input.profile_picture_url,
+
             )
 
             return UserResponse(

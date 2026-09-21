@@ -16,6 +16,7 @@ class UserService:
         current_user,
         username: str | None,
         bio: str | None,
+        profile_picture_url: str | None = None,
     ):
 
         if current_user is None:
@@ -51,6 +52,10 @@ class UserService:
         if bio is not None:
 
             current_user.bio = bio.strip()
+
+        if profile_picture_url is not None:
+
+            current_user.profile_picture_url = profile_picture_url
 
         return self.user_repository.update_user(
             current_user

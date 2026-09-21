@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 
 import FollowButton from "../../components/profile/FollowButton";
 import ProfileSkeleton from "../../components/profile/ProfileSkeleton";
+import ProfilePicture from "../../components/common/ProfilePicture";
 import PostCard from "../../components/post/PostCard";
 import { useAuth } from "../../context/useAuth";
 import { GET_POSTS_BY_USER } from "../../graphql/queries/postQueries";
@@ -47,7 +48,7 @@ function Profile() {
 
   const profile = profileData.user;
   const isOwnProfile = String(profile.id) === String(currentUser?.id);
-  const initial = profile.username.charAt(0).toUpperCase();
+  // const initial = profile.username.charAt(0).toUpperCase();
 
   async function refreshProfile() {
     await Promise.all([refetchProfile(), refetchPosts()]);
@@ -58,8 +59,15 @@ function Profile() {
       <section className="overflow-hidden rounded-2xl border bg-white">
         <div className="h-28 bg-gradient-to-r from-blue-600 to-cyan-400" />
         <div className="px-6 pb-6">
-          <div className="-mt-11 flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-blue-100 text-3xl font-bold text-blue-700">
+          {/* <div className="-mt-11 flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-blue-100 text-3xl font-bold text-blue-700">
             {initial}
+          </div> */}
+          <div className="-mt-11">
+            <ProfilePicture
+              src={profile.profilePictureUrl}
+              alt={profile.username}
+              size="xl"
+            />
           </div>
           <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
             <div>

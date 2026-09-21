@@ -7,6 +7,7 @@ export const GET_CURRENT_USER = gql`
       email
       username
       bio
+      profilePictureUrl
     }
   }
 `;
@@ -18,6 +19,7 @@ export const GET_PROFILE = gql`
       username
       email
       bio
+      profilePictureUrl
       followersCount
       followingCount
       isFollowing
@@ -32,6 +34,7 @@ export const SEARCH_USERS = gql`
       id
       username
       email
+      profilePictureUrl
     }
   }
 `;

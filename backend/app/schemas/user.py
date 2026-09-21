@@ -10,3 +10,5 @@ class UserCreate(BaseModel):
     email: EmailStr  # Validates email format
 
     password: str
+    
+    profile_picture_url: str | None = None

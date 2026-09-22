@@ -1,5 +1,5 @@
 from app.graphql.types.post_type import PostType
-from app.graphql.types.user_type import UserType
+# from app.graphql.types.user_type import UserType
 from app.graphql.queries.user_query import to_user_type
 
 def to_post_type(post):

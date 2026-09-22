@@ -10,6 +10,7 @@ import {
 import {
   GET_MESSAGES,
   GET_CONVERSATION_WITH_USER,
+  GET_CONVERSATION,
 } from "../../graphql/queries/messageQueries";
 import {
   SEND_MESSAGE,
@@ -20,7 +21,8 @@ import { GET_PROFILE } from "../../graphql/queries/userQueries";
 import { useQuery as useProfileQuery } from "@apollo/client/react";
 import { HiOutlineArrowLeft, HiOutlinePaperAirplane } from "react-icons/hi";
 import { useAuth } from "../../context/useAuth";
-import { colorForName } from "../../utils/avatarColor";
+// import { colorForName } from "../../utils/avatarColor";
+import ProfilePicture from "../../components/common/ProfilePicture";
 
 const PAGE_SIZE = 20;
 
@@ -31,20 +33,20 @@ function formatMessageTime(iso) {
   return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 }
 
-function UserAvatar({ username, size = "md" }) {
-  const name = username || "?";
-  const { bg } = colorForName(name);
-  const sizeClass = size === "sm" ? "h-8 w-8 text-xs" : "h-10 w-10 text-sm";
+// function UserAvatar({ username, size = "md" }) {
+//   const name = username || "?";
+//   const { bg } = colorForName(name);
+//   const sizeClass = size === "sm" ? "h-8 w-8 text-xs" : "h-10 w-10 text-sm";
 
-  return (
-    <span
-      className={`flex shrink-0 items-center justify-center rounded-full font-bold text-white ${bg} ${sizeClass}`}
-      aria-hidden="true"
-    >
-      {name.charAt(0).toUpperCase()}
-    </span>
-  );
-}
+//   return (
+//     <span
+//       className={`flex shrink-0 items-center justify-center rounded-full font-bold text-white ${bg} ${sizeClass}`}
+//       aria-hidden="true"
+//     >
+//       {name.charAt(0).toUpperCase()}
+//     </span>
+//   );
+// }
 
 function ChatHeader({ otherUser, onBack, onOpenProfile }) {
   return (
@@ -63,7 +65,11 @@ function ChatHeader({ otherUser, onBack, onOpenProfile }) {
         disabled={!otherUser?.id}
         className="flex min-w-0 flex-1 items-center gap-3 rounded-xl px-1 py-1 text-left transition hover:bg-slate-50 disabled:hover:bg-transparent sm:px-2"
       >
-        <UserAvatar username={otherUser?.username} />
+        {/* <UserAvatar username={otherUser?.username} /> */}
+        <ProfilePicture
+          src={otherUser?.profilePictureUrl}
+          alt={otherUser?.username}
+        />
         <span className="min-w-0">
           <span className="block truncate text-base font-semibold text-slate-900 sm:text-lg">
             {otherUser?.username || "New message"}
@@ -110,6 +116,11 @@ function Chat() {
       variables: { otherUserId: Number(recipientId) },
       skip: !recipientId || conversationId != null,
     });
+
+  const { data: conversationData } = useQuery(GET_CONVERSATION, {
+    variables: { conversationId },
+    skip: !conversationId,
+  });
 
   useEffect(() => {
     const existingId = existingConversationData?.conversationWithUser?.id;
@@ -293,9 +304,12 @@ function Chat() {
     }
   }
 
+  // const otherUser = conversationId
+  //   ? messages.find((message) => String(message.sender.id) !== String(user?.id))
+  //       ?.sender
+  //   : recipientData?.user;
   const otherUser = conversationId
-    ? messages.find((message) => String(message.sender.id) !== String(user?.id))
-        ?.sender
+    ? conversationData?.conversation?.otherUser
     : recipientData?.user;
 
   if (conversationId && loading) {
@@ -379,7 +393,11 @@ function Chat() {
 
           {!messages.length && (
             <div className="flex h-full flex-col items-center justify-center px-6 text-center">
-              <UserAvatar username={otherUser?.username} />
+              {/* <UserAvatar username={otherUser?.username} /> */}
+              <ProfilePicture
+                src={otherUser?.profilePictureUrl}
+                alt={otherUser?.username}
+              />
               <p className="mt-3 font-semibold text-slate-900">
                 {otherUser?.username
                   ? `Message ${otherUser.username}`
@@ -400,8 +418,15 @@ function Chat() {
                   isMine ? "justify-end" : "justify-start"
                 }`}
               >
-                {!isMine && (
+                {/* {!isMine && (
                   <UserAvatar username={item.sender.username} size="sm" />
+                )} */}
+                {!isMine && (
+                  <ProfilePicture
+                    src={item.sender.profilePictureUrl}
+                    alt={item.sender.username}
+                    size="sm"
+                  />
                 )}
                 <div
                   className={`max-w-[80%] rounded-2xl px-3.5 py-2 text-sm leading-relaxed sm:max-w-xs ${
@@ -450,10 +475,7 @@ function Chat() {
           </button>
         </form>
         {message && (
-          <p
-            className="px-4 pb-3 text-xs text-red-600"
-            role="status"
-          >
+          <p className="px-4 pb-3 text-xs text-red-600" role="status">
             {message}
           </p>
         )}

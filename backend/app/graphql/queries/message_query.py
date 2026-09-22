@@ -116,3 +116,31 @@ class MessageQuery:
         except ValueError as e:
 
             raise ValueError(str(e))
+
+        # Look up a conversation directly by its id, for headers/UI that need
+    # the other participant without relying on message contents.
+    @strawberry.field
+    def conversation(
+        self,
+        info: Info,
+        conversation_id: int,
+    ) -> ConversationType:
+
+        current_user = info.context["user"]
+
+        service = MessageService(
+            info.context["db"]
+        )
+
+        try:
+
+            conversation = service.get_conversation(
+                conversation_id=conversation_id,
+                current_user=current_user,
+            )
+
+            return to_conversation_type(conversation, current_user.id)
+
+        except ValueError as e:
+
+            raise ValueError(str(e))

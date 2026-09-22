@@ -37,6 +37,7 @@ export const GET_MESSAGES = gql`
         sender {
           id
           username
+          profilePictureUrl
         }
       }
       nextCursor
@@ -49,6 +50,19 @@ export const GET_CONVERSATION_WITH_USER = gql`
   query GetConversationWithUser($otherUserId: Int!) {
     conversationWithUser(otherUserId: $otherUserId) {
       id
+    }
+  }
+`;
+
+export const GET_CONVERSATION = gql`
+  query GetConversation($conversationId: Int!) {
+    conversation(conversationId: $conversationId) {
+      id
+      otherUser {
+        id
+        username
+        profilePictureUrl
+      }
     }
   }
 `;

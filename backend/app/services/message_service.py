@@ -81,7 +81,23 @@ class MessageService:
         return created_message, conversation
 
     def get_conversations(
+            self,
+            current_user,
+        ):
+
+            if current_user is None:
+
+                raise ValueError(
+                    "Authentication required."
+                )
+
+            return self.conversation_repository.get_conversations_for_user(
+                current_user.id
+            )
+
+    def get_conversation(
         self,
+        conversation_id: int,
         current_user,
     ):
 
@@ -91,9 +107,26 @@ class MessageService:
                 "Authentication required."
             )
 
-        return self.conversation_repository.get_conversations_for_user(
-            current_user.id
+        conversation = self.conversation_repository.get_conversation_by_id(
+            conversation_id
         )
+
+        if not conversation:
+
+            raise ValueError(
+                "Conversation not found."
+            )
+
+        if current_user.id not in (
+            conversation.user_one_id,
+            conversation.user_two_id,
+        ):
+
+            raise ValueError(
+                "You do not have access to this conversation."
+            )
+
+        return conversation
 
     def get_messages(
         self,
